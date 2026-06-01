@@ -1,0 +1,14 @@
+{
+  "name": "caritas-diocese-website",
+  "version": "1.0.0",
+  "description": "Caritas Diocese of Libmanan website",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server",
+    "dev": "http-server -p 8080 -c-1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}
