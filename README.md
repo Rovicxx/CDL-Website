@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Caritas Diocese of Libmanan Website - Local API for Admin Program Management
 
 This project contains a static frontend and a small Express API to allow admin users to add new programs securely.
@@ -96,3 +97,6 @@ During `--guided` you'll be prompted for a stack name and parameters — provide
  - If using CloudFront, configure the distribution to forward CORS headers and use the API endpoint from SAM as the origin for API requests.
 
 If you want, I can generate a `samconfig.toml` or run `sam deploy --guided` steps for you and create a simple CloudFormation/S3 deployment script.
+=======
+# CDL-Website
+>>>>>>> c73c92822c609f618ee7768a35cf2be2c7521a05
