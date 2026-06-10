@@ -1,4 +1,8 @@
-// Daily Scripture Fetcher
+// IMPORTANT: Replace with your Supabase project URL and anon key.
+// You can find these in your Supabase project's API settings.
+const SUPABASE_URL = "https://gsrpmelkrkdiqjptoeoc.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcnBtZWxrcmtkaXFqcHRvZW9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMDg1NjcsImV4cCI6MjA5NjU4NDU2N30.8wSb4Fb3jGP1lQVXsm5VvFcK_RRmQhbQR6YbaxvoLCM";
+
 (function() {
     const scriptureList = [
         '"Commit to the Lord whatever you do, and He will establish your plans." – Proverbs 16:3',
@@ -73,11 +77,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const rightButton = document.getElementById('framework-scroll-right');
     const frameworkCards = document.getElementById('framework-cards');
 
-    const addProgramBtn = document.getElementById('add-program-btn');
-    const addProgramModal = document.getElementById('add-program-modal');
-    const addModalClose = document.getElementById('add-modal-close');
-    const addCancel = document.getElementById('add-cancel');
-    const addProgramForm = document.getElementById('add-program-form');
+    const addActivityBtn = document.getElementById('add-activity-btn');
+    const addActivityModal = document.getElementById('add-activity-modal');
+    const addActivityModalClose = document.getElementById('add-activity-modal-close');
+    const addActivityCancel = document.getElementById('add-activity-cancel');
+    const addActivityForm = document.getElementById('add-activity-form');
 
     const programGalleryModal = document.getElementById('program-gallery-modal');
     const programGalleryTitle = document.getElementById('program-gallery-title');
@@ -85,8 +89,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const programGalleryImages = document.getElementById('program-gallery-images');
     const programGalleryClose = document.getElementById('program-gallery-close');
 
-    // Use this relative API path on Vercel
-    const API_BASE = '/api';
+    const activityDetailModal = document.getElementById('activity-detail-modal');
+    const activityDetailClose = document.getElementById('activity-detail-close');
+    const activityDetailTitle = document.getElementById('activity-detail-title');
+    const activityDetailDate = document.getElementById('activity-detail-date');
+    const activityDetailLocation = document.getElementById('activity-detail-location');
+    const activityDetailImageContainer = document.getElementById('activity-detail-image-container');
+    const activityDetailDescription = document.getElementById('activity-detail-description');
 
     const programImageMap = {
         'tabang-kapwa': {
@@ -158,6 +167,85 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function openAddActivityModal() {
+        if (addActivityModal) {
+            addActivityModal.classList.remove('hidden');
+            addActivityModal.classList.add('flex');
+        }
+    }
+
+    function closeAddActivityModal() {
+        if (addActivityModal) {
+            addActivityModal.classList.add('hidden');
+            addActivityModal.classList.remove('flex');
+        }
+        if (addActivityForm) addActivityForm.reset();
+    }
+
+    function openActivityDetailModal(activity) {
+        if (!activityDetailModal) return;
+
+        activityDetailTitle.textContent = activity.title || 'Activity Details';
+        activityDetailDate.textContent = new Date(activity.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        activityDetailLocation.textContent = activity.location || 'Location Unknown';
+        activityDetailDescription.innerHTML = (activity.description || 'No description provided.').replace(/\n/g, '<br>');
+
+        const fallbackImage = 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80';
+        const displayImage = activity.image_url || fallbackImage;
+        activityDetailImageContainer.innerHTML = `<img src="${displayImage}" alt="${activity.title || 'Activity image'}" class="w-full h-auto object-contain max-h-[50vh]" />`;
+
+        activityDetailModal.classList.remove('hidden');
+        activityDetailModal.classList.add('flex');
+    }
+
+    function closeActivityDetailModal() {
+        if (activityDetailModal) {
+            activityDetailModal.classList.add('hidden');
+            activityDetailModal.classList.remove('flex');
+        }
+    }
+
+    function createActivityCard(activity) {
+        const card = document.createElement('div');
+        card.className = "bg-white border border-gray-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group";
+        card.dataset.activity = JSON.stringify(activity);
+
+        const fallbackImage = 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80';
+        const displayImage = activity.image_url || fallbackImage;
+        const formattedDate = new Date(activity.date).toLocaleDateString('en-US', {
+            month: 'long', day: 'numeric', year: 'numeric'
+        });
+
+        const shortDescription = (activity.description || '').length > 100
+            ? (activity.description || '').substring(0, 100) + '...'
+            : (activity.description || 'No description provided.');
+
+        card.innerHTML = `
+            <div class="relative h-48 overflow-hidden bg-gray-100">
+              <img src="${displayImage}" alt="${activity.title || 'Activity image'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 mix-blend-normal">
+              <div class="absolute bottom-3 left-3 bg-gray-900/80 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border border-white/10 flex items-center space-x-1">
+                <svg class="w-3 h-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>${activity.location || 'Location Unknown'}</span>
+              </div>
+            </div>
+            <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+              <div class="space-y-2">
+                <span class="text-xs font-semibold text-caritasCrimson tracking-wide uppercase block">${formattedDate}</span>
+                <h3 class="font-heading font-extrabold text-xl text-deepCharcoal tracking-tight group-hover:text-caritasCrimson transition duration-150">${activity.title || 'Untitled Activity'}</h3>
+                <p class="text-sm text-gray-600 font-normal leading-relaxed">${shortDescription}</p>
+              </div>
+              <div class="pt-4 border-t border-gray-100 flex items-center justify-between mt-auto">
+                <span class="text-[11px] font-bold text-gray-400 tracking-widest uppercase">Field Dispatch</span>
+                <button type="button" class="view-full-report-btn text-xs font-bold text-caritasCrimson hover:text-red-900 flex items-center space-x-1">
+                  <span>View Full Report</span>
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+        `;
+        return card;
+    }
+
     function attachGalleryCardListeners() {
         if (!frameworkCards) return;
         frameworkCards.querySelectorAll('article[data-program]').forEach(card => {
@@ -168,66 +256,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     openProgramGallery(card);
                 }
             });
-        });
-    }
-
-    function getStoredPrograms() {
-        try {
-            return JSON.parse(localStorage.getItem('cdlPrograms') || '[]');
-        } catch (err) {
-            return [];
-        }
-    }
-
-    function saveStoredPrograms(programs) {
-        localStorage.setItem('cdlPrograms', JSON.stringify(programs));
-    }
-
-    function createProgramCard(program) {
-        const article = document.createElement('article');
-        article.className = 'snap-start shrink-0 w-[90vw] sm:w-[70vw] md:w-[46vw] lg:w-[24rem] xl:w-[26rem] bg-white rounded-2xl p-6 border border-gray-200/80 hover:border-caritasCrimson shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group cursor-pointer';
-        const bulletsHtml = (program.items || []).map(i => `<li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>${i}</span></li>`).join('');
-
-        if (program.key) article.dataset.program = program.key;
-        if (program.title) article.dataset.title = program.title;
-        if (program.tag) article.dataset.subtitle = program.tag;
-        if (program.images && Array.isArray(program.images)) {
-            article.dataset.images = program.images.join(';');
-        }
-
-        article.innerHTML = `
-            <div>
-                <div class="mb-5 flex items-center justify-between">
-                    <span class="text-xs font-bold uppercase tracking-wider text-red-600 bg-red-50 px-2.5 py-1 rounded-md">${program.pillar}</span>
-                    <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-caritasCrimson group-hover:text-white transition duration-300"><img src="images/OIP.png" alt="icon"/></div>
-                </div>
-                <h3 class="font-heading font-extrabold text-xl text-deepCharcoal mb-1">${program.title}</h3>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">${program.tag}</p>
-                <ul class="space-y-2.5 text-sm text-gray-600 mb-6">
-                    ${bulletsHtml}
-                </ul>
-            </div>
-            <div class="pt-4 border-t border-gray-100 mt-auto">
-                <span class="text-xs font-medium text-gray-400 uppercase block mb-0.5">Strategic Focus</span>
-                <span class="text-sm font-bold text-deepCharcoal">Goal: TBD</span>
-            </div>
-        `;
-
-        article.addEventListener('click', () => openProgramGallery(article));
-        article.addEventListener('keydown', event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                openProgramGallery(article);
-            }
-        });
-
-        return article;
-    }
-
-    function renderStoredPrograms() {
-        const stored = getStoredPrograms();
-        stored.forEach(program => {
-            if (frameworkCards) frameworkCards.appendChild(createProgramCard(program));
         });
     }
 
@@ -252,7 +280,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    renderStoredPrograms();
     attachGalleryCardListeners();
 
     if (programGalleryClose) {
@@ -268,78 +295,181 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', event => {
         if (event.key === 'Escape') {
             closeProgramGallery();
-            closeModal();
+            closeAddActivityModal();
+            closeActivityDetailModal();
         }
     });
 
-    // Modal controls
-    function openModal() {
-        if (addProgramModal) {
-            addProgramModal.classList.remove('hidden');
-            addProgramModal.classList.add('flex');
-        }
-    }
-
-    function closeModal() {
-        if (addProgramModal) {
-            addProgramModal.classList.add('hidden');
-            addProgramModal.classList.remove('flex');
-        }
-        if (addProgramForm) addProgramForm.reset();
-    }
-
-    if (addProgramBtn) addProgramBtn.addEventListener('click', openModal);
-    if (addModalClose) addModalClose.addEventListener('click', closeModal);
-    if (addCancel) addCancel.addEventListener('click', closeModal);
-
-    // Handle add program submission
-    if (addProgramForm && frameworkCards) {
-        addProgramForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
-
-            const password = document.getElementById('admin-password').value;
-            const pillar = document.getElementById('program-pillar').value || 'Pillar';
-            const title = document.getElementById('program-title').value || 'New Program';
-            const tag = document.getElementById('program-tag').value || '';
-            const itemsRaw = document.getElementById('program-items').value || '';
-            const items = itemsRaw.split(',').map(s => s.trim()).filter(Boolean);
-
-            try {
-                const targetUrl = API_BASE && API_BASE.indexOf('REPLACE_WITH') === -1
-                    ? API_BASE + '/programs'
-                    : (location.protocol + '//' + location.hostname + ':3000') + '/api/programs';
-
-                const res = await fetch(targetUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password, pillar, title, tag, items })
-                });
-
-                if (res.status === 401) {
-                    alert('Invalid admin password.');
-                    return;
-                }
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    alert('Failed to add program: ' + (err.error || res.statusText));
-                    return;
-                }
-
-                const program = await res.json();
-                const article = createProgramCard(program);
-
-                frameworkCards.appendChild(article);
-                const stored = getStoredPrograms();
-                stored.push(program);
-                saveStoredPrograms(stored);
-                closeModal();
-
-                setTimeout(() => article.scrollIntoView({ behavior: 'smooth', inline: 'center' }), 100);
-
-            } catch (err) {
-                console.error(err);
-                alert('Network error while adding program.');
+    if (addActivityBtn) addActivityBtn.addEventListener('click', openAddActivityModal);
+    if (addActivityModalClose) addActivityModalClose.addEventListener('click', closeAddActivityModal);
+    if (addActivityCancel) addActivityCancel.addEventListener('click', closeAddActivityModal);
+    if (addActivityModal) {
+        addActivityModal.addEventListener('click', event => {
+            if (event.target === addActivityModal) {
+                closeAddActivityModal();
             }
         });
     }
+
+    if (activityDetailClose) {
+        activityDetailClose.addEventListener('click', closeActivityDetailModal);
+    }
+    if (activityDetailModal) {
+        activityDetailModal.addEventListener('click', event => {
+            if (event.target === activityDetailModal) {
+                closeActivityDetailModal();
+            }
+        });
+    }
+
+    const activitiesContainer = document.getElementById('activities-feed-container');
+    if (activitiesContainer) {
+        activitiesContainer.addEventListener('click', (event) => {
+            const viewButton = event.target.closest('.view-full-report-btn');
+            if (viewButton) {
+                const card = viewButton.closest('[data-activity]');
+                if (card && card.dataset.activity) {
+                    openActivityDetailModal(JSON.parse(card.dataset.activity));
+                }
+            }
+        });
+    }
+
+    if (addActivityForm) {
+        addActivityForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+
+            const newActivity = {
+                title: document.getElementById('activity-title').value,
+                description: document.getElementById('activity-description').value,
+                location: document.getElementById('activity-location').value,
+                image_url: document.getElementById('activity-image-url').value,
+                date: document.getElementById('activity-date').value,
+            };
+
+            try {
+                // 1. Authenticate with Supabase Auth
+                const authResponse = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (!authResponse.ok) {
+                    throw new Error('Authentication failed. Please check your admin email and password.');
+                }
+                
+                const authData = await authResponse.json();
+                const accessToken = authData.access_token;
+
+                // 1.5 Get the authenticated user's details to associate with the new activity
+                const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                if (!userResponse.ok) {
+                    throw new Error('Could not retrieve user details after authentication.');
+                }
+
+                const user = await userResponse.json();
+                // Associate the activity with the logged-in user.
+                // Assumes a 'user_id' column in your 'project_activities' table.
+                newActivity.user_id = user.id;
+
+                // 2. Insert the activity using the authenticated user's token
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/project_activities`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(newActivity)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Failed to add activity.');
+                }
+
+                const [createdActivity] = await response.json();
+                const container = document.getElementById('activities-feed-container');
+                const noActivitiesMessage = container.querySelector('.col-span-full');
+                if (noActivitiesMessage) noActivitiesMessage.remove();
+                
+                container.prepend(createActivityCard(createdActivity));
+                closeAddActivityModal();
+
+            } catch (error) {
+                console.error('Error adding activity:', error);
+                alert('Error adding activity: ' + error.message);
+            }
+        });
+    }
+
+    async function fetchRecentActivities() {
+  const container = document.getElementById('activities-feed-container');
+  if (!container) return;
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/project_activities?select=*&order=date.desc&limit=3`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to fetch activities: ${response.status} ${errorText}`);
+    }
+
+    const activities = await response.json();
+    renderActivitiesUI(activities);
+  } catch (error) {
+    console.error('Error syncing with project_activities table:', error);
+    if (container) {
+        container.innerHTML = `
+            <div class="col-span-full text-center py-12">
+                <p class="text-gray-500 font-medium">Could not load recent activities.</p>
+                <p class="text-xs text-gray-400 mt-1">Please check the connection or try again later.</p>
+            </div>
+        `;
+    }
+  }
+}
+
+function renderActivitiesUI(activities) {
+  const container = document.getElementById('activities-feed-container');
+  if (!container) return;
+  
+  container.innerHTML = ''; // Clear existing content
+  
+  if (!activities || activities.length === 0) {
+    container.innerHTML = `
+        <div class="col-span-full text-center py-12">
+            <p class="text-gray-500">No recent activities to display at the moment.</p>
+        </div>
+    `;
+  } else {
+      activities.forEach(activity => {
+          const cardElement = createActivityCard(activity);
+          container.appendChild(cardElement);
+      });
+  }
+}
+
+fetchRecentActivities();
 });

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="images/OIP-17.png">
+    <title>Our 4K Programs — Caritas Diocese of Libmanan, Inc.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui'],
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Calibri', 'sans-serif'],
+                    },
+                    colors: {
+                        primaryWhite: '#FFFFFF',
+                        offWhite: '#F9FAFB',
+                        deepCharcoal: '#111827',
+                        caritasCrimson: '#991B1B',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Calibri", "Helvetica Neue", Arial, sans-serif;
+            background-color: #F9FAFB;
+            color: #111827;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-red-100 selection:text-red-900">
+
+    <header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-200/80 transition-all duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="h-20 flex items-center justify-between">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <img src="images/OIP-17.png" alt="Caritas Diocese Logo" class="w-10 h-10 rounded-xl shadow-md shadow-red-900/20 group-hover:scale-105 transition duration-200 object-cover">
+                    <div class="flex flex-col">
+                        <span class="font-heading font-extrabold text-lg tracking-tight text-deepCharcoal leading-tight">CARITAS</span>
+                        <span class="text-xs font-semibold tracking-widest text-gray-500 uppercase">DIOCESE OF LIBMANAN</span>
+                    </div>
+                </a>
+
+                <div class="flex items-center gap-3">
+                    <nav class="hidden md:flex items-center space-x-8">
+                        <a href="about_us.html" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">About Us</a>
+                        <a href="programs.html" class="text-sm font-medium text-caritasCrimson">Our 4K Programs</a>
+                        <a href="index.html#affiliations" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">Affiliations</a>
+                        <a href="updates.html" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">Updates</a>
+                    </nav>
+                    <a href="index.html#contact" class="hidden md:inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-caritasCrimson hover:bg-red-900 text-white font-medium text-sm tracking-wide shadow-lg shadow-red-900/10 hover:shadow-red-900/20 transition-all duration-150 active:scale-[0.98]">
+                        Contact Us
+                    </a>
+                    <button id="mobile-menu-button" aria-expanded="false" aria-controls="mobile-menu" class="inline-flex items-center justify-center w-11 h-11 rounded-xl border border-gray-200 bg-white text-deepCharcoal shadow-sm md:hidden transition hover:border-caritasCrimson hover:text-caritasCrimson">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+                
+                <!-- Program Gallery Modal -->
+                <div id="program-gallery-modal" class="fixed inset-0 hidden z-50 flex items-center justify-center bg-black/50 px-4 min-h-screen">
+                    <div class="w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl p-6 shadow-2xl border border-gray-200">
+                        <div class="flex items-start justify-between gap-4 mb-4">
+                            <div>
+                                <h3 id="program-gallery-title" class="font-heading font-bold text-2xl text-deepCharcoal">Program Images</h3>
+                                <p id="program-gallery-subtitle" class="text-sm text-gray-500 mt-1">See photos from the selected program.</p>
+                            </div>
+                            <button id="program-gallery-close" class="text-gray-400 hover:text-deepCharcoal text-2xl leading-none">✕</button>
+                        </div>
+                        <div id="program-gallery-images" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- images inserted here -->
+                        </div>
+                        <div class="mt-6 text-sm text-gray-500">
+                            <p>Click outside the modal or press ESC to close.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="mobile-menu" class="md:hidden hidden pb-4">
+                <div class="space-y-2 border-t border-gray-200 pt-4">
+                    <a href="about_us.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">About Us</a>
+                    <a href="programs.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">Our 4K Programs</a>
+                    <a href="index.html#affiliations" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">Affiliations</a>
+                    <a href="updates.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">Updates</a>
+                    <a href="index.html#contact" class="block px-4 py-3 rounded-xl text-sm font-medium text-white bg-caritasCrimson hover:bg-red-900 transition">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <section id="framework" class="py-20 bg-gray-50 border-y border-gray-200/60 h-full">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                    <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-deepCharcoal tracking-tight">
+                        Tabang - Tugang Development Framework
+                    </h2>
+                    <p class="text-base text-gray-600 leading-relaxed">
+                        An integrated, systematic approach mapped systematically into core ecosystem pillars to drive lasting community transformation.
+                    </p>
+                </div>
+
+                <div class="relative">
+                    <button id="framework-scroll-left" type="button" class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm text-deepCharcoal hover:bg-red-50 transition">
+                        <span class="sr-only">Scroll left</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+
+                    <div class="overflow-x-auto scroll-smooth pb-4 -mx-4 px-4 lg:mx-0 lg:px-0">
+                        <div id="framework-cards" class="flex gap-6 min-w-max snap-x snap-mandatory">
+                            <article data-program="tabang-kapwa" data-title="TABANG – KAPWA" data-subtitle="Works of Mercy" data-images="images/image1.png;images/image2.png;images/image3.png;images/image4.png;images/image5.png;images/image6.png;images/image7.png" role="button" tabindex="0" class="cursor-pointer snap-start shrink-0 w-[90vw] sm:w-[70vw] md:w-[46vw] lg:w-[24rem] xl:w-[26rem] bg-white rounded-2xl p-6 border border-gray-200/80 hover:border-caritasCrimson shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                                <div>
+                                    <div class="mb-5 flex items-center justify-between">
+                                        <span class="text-xs font-bold uppercase tracking-wider text-red-600 bg-red-50 px-2.5 py-1 rounded-md">Pillar 01</span>
+                                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-caritasCrimson group-hover:text-white transition duration-300"><img src="images/OIP.png" alt="Pillar 1 icon"/></div>
+                                    </div>
+                                    <h3 class="font-heading font-extrabold text-xl text-deepCharcoal mb-1">TABANG – KAPWA </h3>
+                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Works of Mercy</p>
+                                    <ul class="space-y-2.5 text-sm text-gray-600 mb-6">
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Inclusive Humanitarian Action</span></li>
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Feeding Programs </span></li>
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Medical Missions </span></li>
+                                    </ul>
+                                </div>
+                                <div class="pt-4 border-t border-gray-100 mt-auto">
+                                    <span class="text-xs font-medium text-gray-400 uppercase block mb-0.5">Strategic Focus</span>
+                                    <span class="text-sm font-bold text-deepCharcoal">Goal: Poverty Alleviation</span>
+                                </div>
+                            </article>
+
+                            <article data-program="tabang-kabuhayan" data-title="TABANG – KABUHAYAN" data-subtitle="Works of Development" data-images="images/kabuhayan.png;images/kabuhayan1.png;images/kabuhayan2.png;images/kabuhayan3.png;images/kabuhayan4.png;images/kabuhayan5.png;images/kabuhayan6.png;images/kabuhayan7.png;images/kabuhayan8.png;images/kabuhayan9.png" role="button" tabindex="0" class="cursor-pointer snap-start shrink-0 w-[90vw] sm:w-[70vw] md:w-[46vw] lg:w-[24rem] xl:w-[26rem] bg-white rounded-2xl p-6 border border-gray-200/80 hover:border-caritasCrimson shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                                <div>
+                                    <div class="mb-5 flex items-center justify-between">
+                                        <span class="text-xs font-bold uppercase tracking-wider text-red-600 bg-red-50 px-2.5 py-1 rounded-md">Pillar 02</span>
+                                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-caritasCrimson group-hover:text-white transition duration-300"><img src="images/OIP.png" alt="Pillar 2 icon"/></div>
+                                    </div>
+                                    <h3 class="font-heading font-extrabold text-xl text-deepCharcoal mb-1">TABANG – KABUHAYAN</h3>
+                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Works of Development</p>
+                                    <ul class="space-y-2.5 text-sm text-gray-600 mb-6">
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Sustainable Agriculture</span></li>
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Social Enterprise & Livelihood</span></li>
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Educational Scholarships</span></li>
+                                    </ul>
+                                </div>
+                                <div class="pt-4 border-t border-gray-100 mt-auto">
+                                    <span class="text-xs font-medium text-gray-400 uppercase block mb-0.5">Strategic Focus</span>
+                                    <span class="text-sm font-bold text-deepCharcoal">Goal: Poverty Reduction</span>
+                                </div>
+                            </article>
+
+                            <article data-program="tabang-katilingkasan" data-title="TABANG – KATALINGKASAN" data-subtitle="Works of Justice" data-images="images/katalingkasan1.png;images/katalingkasan2.png;images/katalingkasan3.png;images/katalingkasan4.png;images/katalingkasan5.png;images/katalingkasan6.png;images/katalingkasan7.png" role="button" tabindex="0" class="cursor-pointer snap-start shrink-0 w-[90vw] sm:w-[70vw] md:w-[46vw] lg:w-[24rem] xl:w-[26rem] bg-white rounded-2xl p-6 border border-gray-200/80 hover:border-caritasCrimson shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                                <div>
+                                    <div class="mb-5 flex items-center justify-between">
+                                        <span class="text-xs font-bold uppercase tracking-wider text-red-600 bg-red-50 px-2.5 py-1 rounded-md">Pillar 03</span>
+                                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-caritasCrimson group-hover:text-white transition duration-300"><img src="images/OIP.png" alt="Pillar 3 icon"/></div>
+                                    </div>
+                                    <h3 class="font-heading font-extrabold text-xl text-deepCharcoal mb-1">TABANG – KATALINGKASAN</h3>
+                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Works of Justice</p>
+                                    <ul class="space-y-2.5 text-sm text-gray-600 mb-6">
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Ecological Preservation</span></li>
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Good Governance Advocacy</span></li>
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Voter’s Education (PPCRV)</span></li>
+                                    </ul>
+                                </div>
+                                <div class="pt-4 border-t border-gray-100 mt-auto">
+                                    <span class="text-xs font-medium text-gray-400 uppercase block mb-0.5">Strategic Focus</span>
+                                    <span class="text-sm font-bold text-deepCharcoal">Goal: Poverty Eradication</span>
+                                </div>
+                            </article>
+
+                            <article data-program="tabang-katuwang" data-title="TABANG – KATUWANG" data-subtitle="Volunteer Management" data-images="images/katuwang1.png;images/katuwang2.png;images/katuwang3.png;images/katuwang4.png;images/katuwang5.png;images/katuwang6.png" role="button" tabindex="0" class="cursor-pointer snap-start shrink-0 w-[90vw] sm:w-[70vw] md:w-[46vw] lg:w-[24rem] xl:w-[26rem] bg-white rounded-2xl p-6 border border-gray-200/80 hover:border-caritasCrimson shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                                <div>
+                                    <div class="mb-5 flex items-center justify-between">
+                                        <span class="text-xs font-bold uppercase tracking-wider text-red-600 bg-red-50 px-2.5 py-1 rounded-md">Pillar 04</span>
+                                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-caritasCrimson group-hover:text-white transition duration-300"><img src="images/OIP.png" alt="Pillar 4 icon"/></div>
+                                    </div>
+                                    <h3 class="font-heading font-extrabold text-xl text-deepCharcoal mb-1">TABANG – KATUWANG</h3>
+                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Volunteer Management</p>
+                                    <ul class="space-y-2.5 text-sm text-gray-600 mb-6">
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Recruitment Framework</span></li>
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Capacity Building System</span></li>
+                                        <li class="flex items-start space-x-2"><span class="text-caritasCrimson mt-0.5">•</span><span>Field Deployment Logistics</span></li>
+                                    </ul>
+                                </div>
+                                <div class="pt-4 border-t border-gray-100 mt-auto">
+                                    <span class="text-xs font-medium text-gray-400 uppercase block mb-0.5">Strategic Focus</span>
+                                    <span class="text-sm font-bold text-deepCharcoal">Goal: Poverty in Solidarity</span>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+
+                    <button id="framework-scroll-right" type="button" class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm text-deepCharcoal hover:bg-red-50 transition">
+                        <span class="sr-only">Scroll right</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-deepCharcoal text-white pt-16 pb-8 border-t-4 border-caritasCrimson mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12 border-b border-gray-800">
+                <div class="lg:col-span-5 flex flex-col space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <img src="images/OIP-17.png" alt="Caritas Diocese Logo" class="w-8 h-8 rounded-lg shadow-md object-cover" />
+                        <span class="font-heading font-extrabold text-base tracking-tight uppercase">Caritas Diocese of Libmanan, Inc.</span>
+                    </div>
+                    <p class="text-xs text-gray-400 max-w-sm font-normal leading-relaxed">
+                        Driving strategic rights-based community building and meaningful integration inspired directly by Catholic Social Teachings.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+                    <div class="flex flex-col space-y-1.5">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-caritasCrimson">Direct Email Outreach</span>
+                        <a href="mailto:caritasdioceseoflibmanan@gmail.com" class="text-base font-medium text-white hover:text-red-400 transition underline decoration-gray-600 underline-offset-4 decoration-1 hover:decoration-red-400">
+                            caritasdioceseoflibmanan@gmail.com
+                        </a>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-caritasCrimson">Visit Facebook Page</span>
+                        <a href="https://www.facebook.com/caritaslibmanan" target="_blank" class="text-base font-medium text-white hover:text-red-400 transition underline decoration-gray-600 underline-offset-4 decoration-1 hover:decoration-red-400">
+                            Caritas Diocese of Libmanan
+                        </a>
+                    </div>
+
+                    <div class="flex flex-col space-y-1.5">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Mailing Destination Address</span>
+                        <address class="text-sm text-gray-300 not-italic font-normal leading-relaxed">
+                            Caritas Diocese of Libmanan, Inc.,<br class="hidden sm:inline" />
+                            Camarines Sur, Philippines.
+                        </address>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-[11px] text-gray-500 font-normal order-2 md:order-1 text-center md:text-left">
+                    &copy; 2026 Caritas Diocese of Libmanan, Inc. All rights reserved.
+                </p>
+                <div class="flex items-center space-x-3 order-1 md:order-2 max-w-md text-center md:text-right bg-black/40 border border-gray-800 p-3 rounded-xl">
+                    <p class="text-[10px] text-gray-400 font-medium leading-relaxed">
+                        "Certified by the <span class="text-white font-semibold">Philippine Council for NGO Certification (PCNC)</span> for good governance, transparency, and deep structural accountability."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

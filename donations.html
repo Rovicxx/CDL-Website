@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="images/OIP-17.png">
+    <title>Donations — Caritas Diocese of Libmanan, Inc.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui'],
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Calibri', 'sans-serif'],
+                    },
+                    colors: {
+                        primaryWhite: '#FFFFFF',
+                        offWhite: '#F9FAFB',
+                        deepCharcoal: '#111827',
+                        caritasCrimson: '#991B1B',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Calibri", "Helvetica Neue", Arial, sans-serif;
+            background-color: #F9FAFB;
+            color: #111827;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-red-100 selection:text-red-900">
+
+    <header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-200/80 transition-all duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="h-20 flex items-center justify-between">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <img src="images/OIP-17.png" alt="Caritas Diocese Logo" class="w-10 h-10 rounded-xl shadow-md shadow-red-900/20 group-hover:scale-105 transition duration-200 object-cover">
+                    <div class="flex flex-col">
+                        <span class="font-heading font-extrabold text-lg tracking-tight text-deepCharcoal leading-tight">CARITAS</span>
+                        <span class="text-xs font-semibold tracking-widest text-gray-500 uppercase">DIOCESE OF LIBMANAN</span>
+                    </div>
+                </a>
+
+                <div class="flex items-center gap-3">
+                    <nav class="hidden md:flex items-center space-x-8">
+                        <a href="about_us.html" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">About Us</a>
+                        <a href="programs.html" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">Our 4K Programs</a>
+                        <a href="index.html#affiliations" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">Affiliations</a>
+                        <a href="updates.html" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">Updates</a>
+                    </nav>
+                    <a href="index.html#contact" class="hidden md:inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-caritasCrimson hover:bg-red-900 text-white font-medium text-sm tracking-wide shadow-lg shadow-red-900/10 hover:shadow-red-900/20 transition-all duration-150 active:scale-[0.98]">
+                        Contact Us
+                    </a>
+                    <button id="mobile-menu-button" aria-expanded="false" aria-controls="mobile-menu" class="inline-flex items-center justify-center w-11 h-11 rounded-xl border border-gray-200 bg-white text-deepCharcoal shadow-sm md:hidden transition hover:border-caritasCrimson hover:text-caritasCrimson">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div id="mobile-menu" class="md:hidden hidden pb-4">
+                <div class="space-y-2 border-t border-gray-200 pt-4">
+                    <a href="about_us.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">About Us</a>
+                    <a href="programs.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">Our 4K Programs</a>
+                    <a href="index.html#affiliations" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">Affiliations</a>
+                    <a href="updates.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">Updates</a>
+                    <a href="index.html#contact" class="block px-4 py-3 rounded-xl text-sm font-medium text-white bg-caritasCrimson hover:bg-red-900 transition">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <section class="relative bg-offWhite font-sans selection:bg-red-100 selection:text-red-900 py-12 px-4 sm:px-6 lg:px-8 flex flex-col">
+            <!-- Header -->
+            <div class="bg-white border-b border-gray-200 shadow-sm -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-8 mb-8">
+                <div class="max-w-7xl mx-auto">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold uppercase tracking-widest text-caritasCrimson bg-red-50 border border-red-100 px-3 py-1 rounded-full inline-block">
+                                Support Our Mission
+                            </span>
+                            <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-deepCharcoal tracking-tight">
+                                Make a Donation
+                            </h2>
+                            <p class="text-sm text-gray-600 max-w-2xl">
+                                Your generosity helps us empower the marginalized, ensure structural justice, and cultivate local community resilience.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="max-w-2xl mx-auto w-full space-y-6">
+                
+                <!-- QR Code Section -->
+                <div class="w-full bg-white rounded-2xl border border-gray-200 shadow-lg p-8 flex flex-col items-center text-center space-y-6">
+                    <h3 class="font-heading font-bold text-xl text-deepCharcoal">Scan to Donate</h3>
+                    <p class="text-gray-600 text-sm">Please scan the QR code below using your preferred payment app.</p>
+                    
+                    <div class="w-70 h-70 border-4 border-gray-100 rounded-xl overflow-hidden shadow-sm flex items-center justify-center bg-gray-50">
+                        <!-- Replace src with the actual QR image path -->
+                        <img src="images/" alt="Donation QR Code" class="max-w-full max-h-full object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-gray-400 text-sm\'>QR Code Image Placeholder</span>';" />
+                    </div>
+                </div>
+
+                <!-- Direct Bank Transfer Section -->
+                <div class="w-full bg-white rounded-2xl border border-gray-200 shadow-lg p-8 flex flex-col items-center text-center space-y-4">
+                    <h3 class="font-heading font-bold text-xl text-deepCharcoal">Direct Bank Transfer</h3>
+                    <p class="text-gray-600 text-sm">You can also send your donations directly to our bank accounts.</p>
+                    
+                    <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-left">
+                        <!-- Bank Account 1 -->
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col space-y-3">
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Bank Name</p>
+                                <p class="font-semibold text-deepCharcoal">BPI</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Account Name</p>
+                                <p class="font-semibold text-deepCharcoal">CARITAS DIOCESE OF LIBMANAN, Inc.</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Account Number</p>
+                                <p class="font-mono font-bold text-lg text-caritasCrimson tracking-wide">[8861-0163-24]</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Bank Account 2 (You can delete this card if you only have one account) -->
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col space-y-3">
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Bank Name</p>
+                                <p class="font-semibold text-deepCharcoal">Metrobank</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Account Name</p>
+                                <p class="font-semibold text-deepCharcoal">CARITAS DIOCESE OF LIBMANAN CDL INC.</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Account Number</p>
+                                <p class="font-mono font-bold text-lg text-caritasCrimson tracking-wide">[627-7-62750704-2]</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col space-y-3">
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Bank Name</p>
+                                <p class="font-semibold text-deepCharcoal">BDO</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Account Name</p>
+                                <p class="font-semibold text-deepCharcoal">CARITAS DIOCESE OF LIBMANAN (CDL) INC.</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Account Number</p>
+                                <p class="font-mono font-bold text-lg text-caritasCrimson tracking-wide">[11110067834]</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col space-y-3">
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Bank Name</p>
+                                <p class="font-semibold text-deepCharcoal">UCPB</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Account Name</p>
+                                <p class="font-semibold text-deepCharcoal">CDL-SWFA</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Account Number</p>
+                                <p class="font-mono font-bold text-lg text-caritasCrimson tracking-wide">[330-01-11238-3]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 w-full text-center">
+                    <p class="text-sm font-medium text-gray-500">Thank you for your generous support!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-deepCharcoal text-white pt-16 pb-8 border-t-4 border-caritasCrimson mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+            <div class="flex justify-center items-center space-x-3">
+                <img src="images/OIP-17.png" alt="Caritas Diocese Logo" class="w-8 h-8 rounded-lg shadow-md object-cover" />
+                <span class="font-heading font-extrabold text-base tracking-tight uppercase">Caritas Diocese of Libmanan, Inc.</span>
+            </div>
+            <p class="text-[11px] text-gray-500 font-normal">
+                &copy; 2026 Caritas Diocese of Libmanan, Inc. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

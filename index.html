@@ -52,7 +52,7 @@
                 <div class="flex items-center gap-3">
                     <nav class="hidden md:flex items-center space-x-8">
                         <a href="about_us.html" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">About Us</a>
-                        <a href="#framework" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">Our 4K Programs</a>
+                        <a href="programs.html" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">Our 4K Programs</a>
                         <a href="#affiliations" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">Affiliations</a>
                         <a href="updates.html" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition duration-150">Updates</a>
                     </nav>
@@ -64,73 +64,12 @@
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
                 </div>
-                
-                <!-- Add Program Modal -->
-                <div id="add-program-modal" class="fixed inset-0 hidden z-50 flex items-center justify-center bg-black/40 px-4 min-h-screen">
-                    <div class="w-full max-w-lg bg-white rounded-2xl p-6 shadow-2xl border border-gray-200">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="font-heading font-bold text-lg text-deepCharcoal">Add New Program (Admin)</h3>
-                            <button id="add-modal-close" class="text-gray-400 hover:text-deepCharcoal">✕</button>
-                        </div>
-
-                        <form id="add-program-form" class="space-y-4">
-                            <div>
-                                <label class="text-xs font-semibold text-gray-500">Admin Password</label>
-                                <input id="admin-password" type="password" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" required />
-                            </div>
-
-                            <div>
-                                <label class="text-xs font-semibold text-gray-500">Pillar label (e.g. Pillar 05)</label>
-                                <input id="program-pillar" type="text" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" placeholder="Pillar 05" required />
-                            </div>
-
-                            <div>
-                                <label class="text-xs font-semibold text-gray-500">Program Title</label>
-                                <input id="program-title" type="text" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" placeholder="TABANG – NEW" required />
-                            </div>
-
-                            <div>
-                                <label class="text-xs font-semibold text-gray-500">Short Tagline</label>
-                                <input id="program-tag" type="text" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" placeholder="Works of ..." />
-                            </div>
-
-                            <div>
-                                <label class="text-xs font-semibold text-gray-500">Bullet items (comma separated)</label>
-                                <input id="program-items" type="text" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" placeholder="Item 1, Item 2, Item 3" />
-                            </div>
-
-                            <div class="flex items-center justify-end space-x-3">
-                                <button type="button" id="add-cancel" class="px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-600">Cancel</button>
-                                <button type="submit" class="px-4 py-2 rounded-xl bg-caritasCrimson text-white">Add Program</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Program Gallery Modal -->
-                <div id="program-gallery-modal" class="fixed inset-0 hidden z-50 flex items-center justify-center bg-black/50 px-4 min-h-screen">
-                    <div class="w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl p-6 shadow-2xl border border-gray-200">
-                        <div class="flex items-start justify-between gap-4 mb-4">
-                            <div>
-                                <h3 id="program-gallery-title" class="font-heading font-bold text-2xl text-deepCharcoal">Program Images</h3>
-                                <p id="program-gallery-subtitle" class="text-sm text-gray-500 mt-1">See photos from the selected program.</p>
-                            </div>
-                            <button id="program-gallery-close" class="text-gray-400 hover:text-deepCharcoal text-2xl leading-none">✕</button>
-                        </div>
-                        <div id="program-gallery-images" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <!-- images inserted here -->
-                        </div>
-                        <div class="mt-6 text-sm text-gray-500">
-                            <p>Click outside the modal or press ESC to close.</p>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div id="mobile-menu" class="md:hidden hidden pb-4">
                 <div class="space-y-2 border-t border-gray-200 pt-4">
                     <a href="about_us.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">About Us</a>
-                    <a href="#framework" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">Our 4K Programs</a>
+                    <a href="programs.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">Our 4K Programs</a>
                     <a href="#affiliations" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">Affiliations</a>
                     <a href="updates.html" class="block px-4 py-3 rounded-xl text-sm font-medium text-deepCharcoal bg-gray-50 hover:bg-red-50 transition">Updates</a>
                     <a href="#contact" class="block px-4 py-3 rounded-xl text-sm font-medium text-white bg-caritasCrimson hover:bg-red-900 transition">Contact Us</a>
@@ -138,6 +77,76 @@
             </div>
         </div>
     </header>
+
+    <!-- Add Activity Modal -->
+    <div id="add-activity-modal" class="fixed inset-0 hidden z-50 flex items-center justify-center bg-black/40 px-4 min-h-screen">
+        <div class="w-full max-w-lg bg-white rounded-2xl p-6 shadow-2xl border border-gray-200">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-heading font-bold text-lg text-deepCharcoal">Add New Activity (Admin)</h3>
+                <button id="add-activity-modal-close" class="text-gray-400 hover:text-deepCharcoal">✕</button>
+            </div>
+
+            <form id="add-activity-form" class="space-y-4">
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="text-xs font-semibold text-gray-500">Admin Email</label>
+                        <input id="admin-email" type="email" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" required placeholder="admin@example.com" />
+                    </div>
+                    <div class="flex-1">
+                        <label class="text-xs font-semibold text-gray-500">Admin Password</label>
+                        <input id="admin-password" type="password" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" required placeholder="Required for submission" />
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-gray-500">Activity Title</label>
+                    <input id="activity-title" type="text" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" required />
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-gray-500">Description</label>
+                    <textarea id="activity-description" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" rows="3" required></textarea>
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-gray-500">Location</label>
+                    <input id="activity-location" type="text" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" required />
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-gray-500">Image URL</label>
+                    <input id="activity-image-url" type="text" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" placeholder="https://example.com/image.png" />
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-gray-500">Date</label>
+                    <input id="activity-date" type="date" class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" required />
+                </div>
+                <div class="flex items-center justify-end space-x-3 pt-2">
+                    <button type="button" id="add-activity-cancel" class="px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-600">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-caritasCrimson text-white">Add Activity</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Activity Detail Modal -->
+    <div id="activity-detail-modal" class="fixed inset-0 hidden z-50 flex items-center justify-center bg-black/60 px-4 min-h-screen">
+        <div class="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl p-6 shadow-2xl border border-gray-200">
+            <div class="flex items-start justify-between gap-4 mb-6">
+                <div>
+                    <h3 id="activity-detail-title" class="font-heading font-bold text-2xl text-deepCharcoal">Activity Details</h3>
+                    <div class="flex items-center space-x-4 text-xs text-gray-500 mt-2">
+                        <span id="activity-detail-date"></span>
+                        <span id="activity-detail-location"></span>
+                    </div>
+                </div>
+                <button id="activity-detail-close" class="text-gray-400 hover:text-deepCharcoal text-2xl leading-none">✕</button>
+            </div>
+            <div class="space-y-6">
+                <div id="activity-detail-image-container" class="rounded-2xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50"></div>
+                <div id="activity-detail-description" class="text-base text-gray-700 leading-relaxed prose max-w-none"></div>
+            </div>
+            <div class="mt-6 text-sm text-gray-500">
+                <p>Click outside the modal or press ESC to close.</p>
+            </div>
+        </div>
+    </div>
 
     <main class="flex-grow">
 
@@ -157,8 +166,8 @@
                             The humanitarian, social action, and development arm of the Diocese of Libmanan. Empowering the marginalized, ensuring structural justice, and cultivating local community resilience.
                         </p>
                         <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                            <a href="#framework" class="inline-flex items-center justify-center px-6 py-3.5 bg-caritasCrimson hover:bg-red-900 text-white font-medium rounded-xl shadow-xl shadow-red-900/10 hover:shadow-red-900/20 transition-all duration-150 transform hover:-translate-y-0.5">
-                                Explore Our Programs
+                            <a href="donations.html" class="inline-flex items-center justify-center px-6 py-3.5 bg-caritasCrimson hover:bg-red-900 text-white font-medium rounded-xl shadow-xl shadow-red-900/10 hover:shadow-red-900/20 transition-all duration-150 transform hover:-translate-y-0.5">
+                                Send Donations
                             </a>
                             <a href="#timeline" class="inline-flex items-center justify-center px-6 py-3.5 bg-white hover:bg-gray-50 text-deepCharcoal font-medium rounded-xl border border-gray-200 shadow-sm transition-all duration-150 transform hover:-translate-y-0.5">
                                 Read Our History
@@ -203,155 +212,31 @@
             </div>
         </section>
 
-        <section id="framework" class="py-20 bg-gray-50 border-y border-gray-200/60">
+        <section id="recent-activities" class="py-20 bg-gray-50 border-y border-gray-200/80">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
                 <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                    <span class="text-xs font-bold uppercase tracking-widest text-caritasCrimson bg-red-50 border border-red-100 px-3 py-1 rounded-full">From the Field</span>
                     <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-deepCharcoal tracking-tight">
-                        Tabang - Tugang Development Framework
+                        Recent Program Activities
                     </h2>
                     <p class="text-base text-gray-600 leading-relaxed">
-                        An integrated, systematic approach mapped systematically into core ecosystem pillars to drive lasting community transformation.
+                        Stay updated with our latest community engagements, humanitarian missions, and development projects on the ground.
                     </p>
                 </div>
 
-                <div class="flex justify-center mb-6">
-                    <button id="add-program-btn" class="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 rounded-xl shadow-sm hover:bg-red-50 text-deepCharcoal">
-                        <svg class="w-4 h-4 text-deepCharcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                        <span class="text-sm font-medium">Add Program</span>
+                <div class="text-center mb-8">
+                    <button id="add-activity-btn" class="inline-flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 rounded-xl shadow-sm hover:bg-red-50 text-deepCharcoal">
+                        <svg class="w-4 h-4 text-deepCharcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        <span class="text-sm font-medium">Add Activity (Admin)</span>
                     </button>
                 </div>
 
-                <div class="relative">
-                    <button id="framework-scroll-left" type="button" class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm text-deepCharcoal hover:bg-red-50 transition">
-                        <span class="sr-only">Scroll left</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                    </button>
-
-                    <div class="overflow-x-auto scroll-smooth pb-4 -mx-4 px-4 lg:mx-0 lg:px-0">
-                        <div id="framework-cards" class="flex gap-6 min-w-max snap-x snap-mandatory">
-                            <article data-program="tabang-kapwa" data-title="TABANG – KAPWA" data-subtitle="Works of Mercy" data-images="images/image1.png;images/image2.png;images/image3.png;images/image4.png;images/image5.png;images/image6.png;images/image7.png" role="button" tabindex="0" class="cursor-pointer snap-start shrink-0 w-[90vw] sm:w-[70vw] md:w-[46vw] lg:w-[24rem] xl:w-[26rem] bg-white rounded-2xl p-6 border border-gray-200/80 hover:border-caritasCrimson shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
-                                <div>
-                                    <div class="mb-5 flex items-center justify-between">
-                                        <span class="text-xs font-bold uppercase tracking-wider text-red-600 bg-red-50 px-2.5 py-1 rounded-md">Pillar 01</span>
-                                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-caritasCrimson group-hover:text-white transition duration-300"><img src="images/OIP.png" alt="Pillar 1 icon"/></div>
-                                    </div>
-                                    <h3 class="font-heading font-extrabold text-xl text-deepCharcoal mb-1">TABANG – KAPWA </h3>
-                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Works of Mercy</p>
-                                    <ul class="space-y-2.5 text-sm text-gray-600 mb-6">
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Inclusive Humanitarian Action</span>
-                                        </li>
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Feeding Programs </span>
-                                        </li>
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Medical Missions </span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="pt-4 border-t border-gray-100 mt-auto">
-                                    <span class="text-xs font-medium text-gray-400 uppercase block mb-0.5">Strategic Focus</span>
-                                    <span class="text-sm font-bold text-deepCharcoal">Goal: Poverty Alleviation</span>
-                                </div>
-                            </article>
-
-                            <article data-program="tabang-kabuhayan" data-title="TABANG – KABUHAYAN" data-subtitle="Works of Development" data-images="images/kabuhayan.png;images/kabuhayan1.png;images/kabuhayan2.png;images/kabuhayan3.png;images/kabuhayan4.png;images/kabuhayan5.png;images/kabuhayan6.png;images/kabuhayan7.png;images/kabuhayan8.png;images/kabuhayan9.png" role="button" tabindex="0" class="cursor-pointer snap-start shrink-0 w-[90vw] sm:w-[70vw] md:w-[46vw] lg:w-[24rem] xl:w-[26rem] bg-white rounded-2xl p-6 border border-gray-200/80 hover:border-caritasCrimson shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
-                                <div>
-                                    <div class="mb-5 flex items-center justify-between">
-                                        <span class="text-xs font-bold uppercase tracking-wider text-red-600 bg-red-50 px-2.5 py-1 rounded-md">Pillar 02</span>
-                                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-caritasCrimson group-hover:text-white transition duration-300"><img src="images/OIP.png" alt="Pillar 2 icon"/></div>
-                                    </div>
-                                    <h3 class="font-heading font-extrabold text-xl text-deepCharcoal mb-1">TABANG – KABUHAYAN</h3>
-                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Works of Development</p>
-                                    <ul class="space-y-2.5 text-sm text-gray-600 mb-6">
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Sustainable Agriculture</span>
-                                        </li>
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Social Enterprise & Livelihood</span>
-                                        </li>
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Educational Scholarships</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="pt-4 border-t border-gray-100 mt-auto">
-                                    <span class="text-xs font-medium text-gray-400 uppercase block mb-0.5">Strategic Focus</span>
-                                    <span class="text-sm font-bold text-deepCharcoal">Goal: Poverty Reduction</span>
-                                </div>
-                            </article>
-
-                            <article data-program="tabang-katilingkasan" data-title="TABANG – KATALINGKASAN" data-subtitle="Works of Justice" data-images="images/katalingkasan1.png;images/katalingkasan2.png;images/katalingkasan3.png;images/katalingkasan4.png;images/katalingkasan5.png;images/katalingkasan6.png;images/katalingkasan7.png" role="button" tabindex="0" class="cursor-pointer snap-start shrink-0 w-[90vw] sm:w-[70vw] md:w-[46vw] lg:w-[24rem] xl:w-[26rem] bg-white rounded-2xl p-6 border border-gray-200/80 hover:border-caritasCrimson shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
-                                <div>
-                                    <div class="mb-5 flex items-center justify-between">
-                                        <span class="text-xs font-bold uppercase tracking-wider text-red-600 bg-red-50 px-2.5 py-1 rounded-md">Pillar 03</span>
-                                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-caritasCrimson group-hover:text-white transition duration-300"><img src="images/OIP.png" alt="Pillar 3 icon"/></div>
-                                    </div>
-                                    <h3 class="font-heading font-extrabold text-xl text-deepCharcoal mb-1">TABANG – KATALINGKASAN</h3>
-                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Works of Justice</p>
-                                    <ul class="space-y-2.5 text-sm text-gray-600 mb-6">
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Ecological Preservation</span>
-                                        </li>
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Good Governance Advocacy</span>
-                                        </li>
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Voter’s Education (PPCRV)</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="pt-4 border-t border-gray-100 mt-auto">
-                                    <span class="text-xs font-medium text-gray-400 uppercase block mb-0.5">Strategic Focus</span>
-                                    <span class="text-sm font-bold text-deepCharcoal">Goal: Poverty Eradication</span>
-                                </div>
-                            </article>
-
-                            <article data-program="tabang-katuwang" data-title="TABANG – KATUWANG" data-subtitle="Volunteer Management" data-images="images/katuwang1.png;images/katuwang2.png;images/katuwang3.png;images/katuwang4.png;images/katuwang5.png;images/katuwang6.png" role="button" tabindex="0" class="cursor-pointer snap-start shrink-0 w-[90vw] sm:w-[70vw] md:w-[46vw] lg:w-[24rem] xl:w-[26rem] bg-white rounded-2xl p-6 border border-gray-200/80 hover:border-caritasCrimson shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
-                                <div>
-                                    <div class="mb-5 flex items-center justify-between">
-                                        <span class="text-xs font-bold uppercase tracking-wider text-red-600 bg-red-50 px-2.5 py-1 rounded-md">Pillar 04</span>
-                                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-caritasCrimson group-hover:text-white transition duration-300"><img src="images/OIP.png" alt="Pillar 4 icon"/></div>
-                                    </div>
-                                    <h3 class="font-heading font-extrabold text-xl text-deepCharcoal mb-1">TABANG – KATUWANG</h3>
-                                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Volunteer Management</p>
-                                    <ul class="space-y-2.5 text-sm text-gray-600 mb-6">
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Recruitment Framework</span>
-                                        </li>
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Capacity Building System</span>
-                                        </li>
-                                        <li class="flex items-start space-x-2">
-                                            <span class="text-caritasCrimson mt-0.5">•</span>
-                                            <span>Field Deployment Logistics</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="pt-4 border-t border-gray-100 mt-auto">
-                                    <span class="text-xs font-medium text-gray-400 uppercase block mb-0.5">Strategic Focus</span>
-                                    <span class="text-sm font-bold text-deepCharcoal">Goal: Poverty in Solidarity</span>
-                                </div>
-                            </article>
-                        </div>
+                <div id="activities-feed-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    <!-- Loading State -->
+                    <div class="text-center py-12 col-span-full">
+                        <p class="text-gray-500">Loading recent activities...</p>
                     </div>
-
-                    <button id="framework-scroll-right" type="button" class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm text-deepCharcoal hover:bg-red-50 transition">
-                        <span class="sr-only">Scroll right</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                    </button>
+                    <!-- Activities will be dynamically inserted here by scripts.js -->
                 </div>
             </div>
         </section>
