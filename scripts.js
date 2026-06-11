@@ -144,9 +144,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (programGallerySubtitle) programGallerySubtitle.textContent = program.subtitle;
 
         if (programGalleryImages) {
+            const safeGalleryTitle = (program.title || 'Program').replace(/"/g, '&quot;');
             programGalleryImages.innerHTML = program.images.map(src => `
                 <div class="rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
-                    <img src="${src}" alt="${program.title} photo" class="w-full h-48 object-cover" />
+                    <img src="${src}" alt="${safeGalleryTitle} photo" title="${safeGalleryTitle} photo" loading="lazy" class="w-full h-48 object-cover" />
                 </div>
             `).join('');
         }
@@ -192,7 +193,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const fallbackImage = 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80';
         const displayImage = activity.image_url || fallbackImage;
-        activityDetailImageContainer.innerHTML = `<img src="${displayImage}" alt="${activity.title || 'Activity image'}" class="w-full h-auto object-contain max-h-[50vh]" />`;
+        const activityTitle = activity.title || 'Program Activity';
+        const activityLocation = activity.location || 'Unknown Location';
+        const safeTitle = `Caritas Libmanan Field Update: ${activityTitle} at ${activityLocation}`.replace(/"/g, '&quot;');
+        activityDetailImageContainer.innerHTML = `<img src="${displayImage}" alt="${safeTitle}" title="${safeTitle}" class="w-full h-auto object-contain max-h-[50vh]" />`;
 
         activityDetailModal.classList.remove('hidden');
         activityDetailModal.classList.add('flex');
@@ -216,13 +220,16 @@ document.addEventListener('DOMContentLoaded', function () {
             month: 'long', day: 'numeric', year: 'numeric'
         });
 
+        const activityTitle = activity.title || 'Program Activity';
+        const activityLocation = activity.location || 'Unknown Location';
+        const safeTitle = `Caritas Libmanan Field Update: ${activityTitle} at ${activityLocation}`.replace(/"/g, '&quot;');
         const shortDescription = (activity.description || '').length > 100
             ? (activity.description || '').substring(0, 100) + '...'
             : (activity.description || 'No description provided.');
 
         card.innerHTML = `
             <div class="relative h-48 overflow-hidden bg-gray-100">
-              <img src="${displayImage}" alt="${activity.title || 'Activity image'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 mix-blend-normal">
+              <img src="${displayImage}" alt="${safeTitle}" title="${safeTitle}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 mix-blend-normal">
               <div class="absolute bottom-3 left-3 bg-gray-900/80 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border border-white/10 flex items-center space-x-1">
                 <svg class="w-3 h-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 <span>${activity.location || 'Location Unknown'}</span>
