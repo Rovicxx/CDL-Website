@@ -26,24 +26,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        heading: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui'],
-                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Calibri', 'sans-serif'],
-                    },
-                    colors: {
-                        primaryWhite: '#FFFFFF',
-                        offWhite: '#F9FAFB',
-                        deepCharcoal: '#111827',
-                        caritasCrimson: '#991B1B',
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="tailwind-config.js"></script>
     <style>
         body {
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Calibri", "Helvetica Neue", Arial, sans-serif;
@@ -472,7 +455,7 @@
                             caritasdioceseoflibmanan@gmail.com
                         </a>
                         <span class="text-[10px] font-bold text-caritasCrimson uppercase tracking-widest">Visit Facebook Page</span>
-                        <a href="https://www.facebook.com/caritaslibmanan" target="_blank" class="text-base font-medium text-white hover:text-red-400 transition underline decoration-gray-600 underline-offset-4 decoration-1 hover:decoration-red-400">
+                        <a href="https://www.facebook.com/caritaslibmanan" target="_blank" rel="noopener noreferrer" class="text-base font-medium text-white hover:text-red-400 transition underline decoration-gray-600 underline-offset-4 decoration-1 hover:decoration-red-400">
                             Caritas Diocese of Libmanan
                         </a>
                     </div>
@@ -491,7 +474,7 @@
 
             <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
                 <p class="text-[11px] text-gray-500 font-normal order-2 md:order-1 text-center md:text-left">
-                    &copy; 2026 Caritas Diocese of Libmanan, Inc. All rights reserved.
+                    &copy; 2026 Caritas Diocese of Libmanan, Inc. All rights reserved. · <a href="privacy.html" class="hover:text-white underline underline-offset-4 decoration-gray-600">Privacy Policy</a>
                 </p>
                 <div class="flex items-center space-x-3 order-1 md:order-2 max-w-md text-center md:text-right bg-black/40 border border-gray-800 p-3 rounded-xl">
                     <p class="text-[10px] text-gray-400 font-medium leading-relaxed">

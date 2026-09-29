@@ -2,6 +2,57 @@
 // You can find these in your Supabase project's API settings.
 const SUPABASE_URL = "https://gsrpmelkrkdiqjptoeoc.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcnBtZWxrcmtkaXFqcHRvZW9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMDg1NjcsImV4cCI6MjA5NjU4NDU2N30.8wSb4Fb3jGP1lQVXsm5VvFcK_RRmQhbQR6YbaxvoLCM";
+// The anon key above is public by design. Real write protection comes from the
+// Row Level Security policies on the Supabase tables (see supabase/security.sql).
+
+// Escape text before placing it inside innerHTML (activity data comes from the database).
+function escapeHtml(value) {
+    return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// Only allow http(s) or same-site relative image URLs; anything else uses the fallback.
+function safeImageUrl(value, fallback) {
+    if (!value) return fallback;
+    try {
+        const url = new URL(String(value).trim(), window.location.href);
+        return (url.protocol === 'https:' || url.protocol === 'http:') ? url.href : fallback;
+    } catch (err) {
+        return fallback;
+    }
+}
+
+// Client-side cooldown for the admin sign-in form. This only slows down the form;
+// the server-side limit is Supabase Auth's own rate limiting.
+const LOGIN_COOLDOWN_KEY = 'cdl_admin_login_attempts';
+const LOGIN_COOLDOWN_MINUTES = [0, 0, 1, 3, 5, 15, 30]; // after the 1st..7th+ failure
+
+function readLoginAttempts() {
+    try {
+        const data = JSON.parse(localStorage.getItem(LOGIN_COOLDOWN_KEY));
+        if (data && typeof data.failures === 'number') return data;
+    } catch (err) { /* storage unavailable */ }
+    return { failures: 0, lockedUntil: 0 };
+}
+
+function writeLoginAttempts(data) {
+    try {
+        if (data.failures === 0) localStorage.removeItem(LOGIN_COOLDOWN_KEY);
+        else localStorage.setItem(LOGIN_COOLDOWN_KEY, JSON.stringify(data));
+    } catch (err) { /* storage unavailable */ }
+}
+
+function recordLoginFailure() {
+    const data = readLoginAttempts();
+    data.failures += 1;
+    const index = Math.min(data.failures, LOGIN_COOLDOWN_MINUTES.length) - 1;
+    data.lockedUntil = Date.now() + LOGIN_COOLDOWN_MINUTES[index] * 60 * 1000;
+    writeLoginAttempts(data);
+}
 
 (function() {
     const scriptureList = [
@@ -144,10 +195,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (programGallerySubtitle) programGallerySubtitle.textContent = program.subtitle;
 
         if (programGalleryImages) {
-            const safeGalleryTitle = (program.title || 'Program').replace(/"/g, '&quot;');
+            const safeGalleryTitle = escapeHtml(program.title || 'Program');
             programGalleryImages.innerHTML = program.images.map(src => `
                 <div class="rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
-                    <img src="${src}" alt="${safeGalleryTitle} photo" title="${safeGalleryTitle} photo" loading="lazy" class="w-full h-48 object-cover" />
+                    <img src="${escapeHtml(safeImageUrl(src, 'images/group.png'))}" alt="${safeGalleryTitle} photo" title="${safeGalleryTitle} photo" loading="lazy" class="w-full h-48 object-cover" />
                 </div>
             `).join('');
         }
@@ -189,13 +240,13 @@ document.addEventListener('DOMContentLoaded', function () {
         activityDetailTitle.textContent = activity.title || 'Activity Details';
         activityDetailDate.textContent = new Date(activity.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
         activityDetailLocation.textContent = activity.location || 'Location Unknown';
-        activityDetailDescription.innerHTML = (activity.description || 'No description provided.').replace(/\n/g, '<br>');
+        activityDetailDescription.innerHTML = escapeHtml(activity.description || 'No description provided.').replace(/\n/g, '<br>');
 
         const fallbackImage = 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80';
-        const displayImage = activity.image_url || fallbackImage;
+        const displayImage = escapeHtml(safeImageUrl(activity.image_url, fallbackImage));
         const activityTitle = activity.title || 'Program Activity';
         const activityLocation = activity.location || 'Unknown Location';
-        const safeTitle = `Caritas Libmanan Field Update: ${activityTitle} at ${activityLocation}`.replace(/"/g, '&quot;');
+        const safeTitle = escapeHtml(`Caritas Libmanan Field Update: ${activityTitle} at ${activityLocation}`);
         activityDetailImageContainer.innerHTML = `<img src="${displayImage}" alt="${safeTitle}" title="${safeTitle}" class="w-full h-auto object-contain max-h-[50vh]" />`;
 
         activityDetailModal.classList.remove('hidden');
@@ -215,30 +266,30 @@ document.addEventListener('DOMContentLoaded', function () {
         card.dataset.activity = JSON.stringify(activity);
 
         const fallbackImage = 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80';
-        const displayImage = activity.image_url || fallbackImage;
-        const formattedDate = new Date(activity.date).toLocaleDateString('en-US', {
+        const displayImage = escapeHtml(safeImageUrl(activity.image_url, fallbackImage));
+        const formattedDate = escapeHtml(new Date(activity.date).toLocaleDateString('en-US', {
             month: 'long', day: 'numeric', year: 'numeric'
-        });
+        }));
 
         const activityTitle = activity.title || 'Program Activity';
         const activityLocation = activity.location || 'Unknown Location';
-        const safeTitle = `Caritas Libmanan Field Update: ${activityTitle} at ${activityLocation}`.replace(/"/g, '&quot;');
-        const shortDescription = (activity.description || '').length > 100
+        const safeTitle = escapeHtml(`Caritas Libmanan Field Update: ${activityTitle} at ${activityLocation}`);
+        const shortDescription = escapeHtml((activity.description || '').length > 100
             ? (activity.description || '').substring(0, 100) + '...'
-            : (activity.description || 'No description provided.');
+            : (activity.description || 'No description provided.'));
 
         card.innerHTML = `
             <div class="relative h-48 overflow-hidden bg-gray-100">
               <img src="${displayImage}" alt="${safeTitle}" title="${safeTitle}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 mix-blend-normal">
               <div class="absolute bottom-3 left-3 bg-gray-900/80 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border border-white/10 flex items-center space-x-1">
                 <svg class="w-3 h-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <span>${activity.location || 'Location Unknown'}</span>
+                <span>${escapeHtml(activity.location || 'Location Unknown')}</span>
               </div>
             </div>
             <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
               <div class="space-y-2">
                 <span class="text-xs font-semibold text-caritasCrimson tracking-wide uppercase block">${formattedDate}</span>
-                <h3 class="font-heading font-extrabold text-xl text-deepCharcoal tracking-tight group-hover:text-caritasCrimson transition duration-150">${activity.title || 'Untitled Activity'}</h3>
+                <h3 class="font-heading font-extrabold text-xl text-deepCharcoal tracking-tight group-hover:text-caritasCrimson transition duration-150">${escapeHtml(activity.title || 'Untitled Activity')}</h3>
                 <p class="text-sm text-gray-600 font-normal leading-relaxed">${shortDescription}</p>
               </div>
               <div class="pt-4 border-t border-gray-100 flex items-center justify-between mt-auto">
@@ -346,17 +397,31 @@ document.addEventListener('DOMContentLoaded', function () {
         addActivityForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            const email = document.getElementById('admin-email').value;
+            const attempts = readLoginAttempts();
+            if (attempts.lockedUntil > Date.now()) {
+                const minutes = Math.ceil((attempts.lockedUntil - Date.now()) / 60000);
+                alert(`Too many failed sign-in attempts. Please wait ${minutes} minute${minutes === 1 ? '' : 's'} and try again.`);
+                return;
+            }
+
+            const email = document.getElementById('admin-email').value.trim().toLowerCase();
             const password = document.getElementById('admin-password').value;
 
+            const imageUrl = document.getElementById('activity-image-url').value.trim();
+            if (imageUrl && !/^https?:\/\//i.test(imageUrl)) {
+                alert('Image URL must start with https:// or http://');
+                return;
+            }
+
             const newActivity = {
-                title: document.getElementById('activity-title').value,
-                description: document.getElementById('activity-description').value,
-                location: document.getElementById('activity-location').value,
-                image_url: document.getElementById('activity-image-url').value,
+                title: document.getElementById('activity-title').value.trim(),
+                description: document.getElementById('activity-description').value.trim(),
+                location: document.getElementById('activity-location').value.trim(),
+                image_url: imageUrl,
                 date: document.getElementById('activity-date').value,
             };
 
+            let accessToken = null;
             try {
                 // 1. Authenticate with Supabase Auth
                 const authResponse = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
@@ -368,12 +433,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     body: JSON.stringify({ email, password })
                 });
 
-                if (!authResponse.ok) {
-                    throw new Error('Authentication failed. Please check your admin email and password.');
+                if (authResponse.status === 429) {
+                    throw new Error('Too many sign-in attempts. Please try again later.');
                 }
-                
+                if (!authResponse.ok) {
+                    recordLoginFailure();
+                    throw new Error('Sign-in failed. Please check your admin email and password.');
+                }
+                writeLoginAttempts({ failures: 0, lockedUntil: 0 });
+
                 const authData = await authResponse.json();
-                const accessToken = authData.access_token;
+                accessToken = authData.access_token;
 
                 // 1.5 Get the authenticated user's details to associate with the new activity
                 const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
@@ -405,8 +475,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.message || 'Failed to add activity.');
+                    // Keep database error details out of the UI.
+                    console.error('Insert failed with status', response.status);
+                    throw new Error(response.status === 401 || response.status === 403
+                        ? 'This account is not allowed to add activities.'
+                        : 'The activity could not be saved. Please try again later.');
                 }
 
                 const [createdActivity] = await response.json();
@@ -418,8 +491,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 closeAddActivityModal();
 
             } catch (error) {
-                console.error('Error adding activity:', error);
-                alert('Error adding activity: ' + error.message);
+                console.error('Error adding activity:', error.message);
+                alert(error instanceof TypeError
+                    ? 'Could not reach the server. Please check your connection.'
+                    : error.message);
+            } finally {
+                // End the session right away; the form signs in again on every submission.
+                if (accessToken) {
+                    fetch(`${SUPABASE_URL}/auth/v1/logout`, {
+                        method: 'POST',
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${accessToken}` }
+                    }).catch(() => {});
+                }
             }
         });
     }
@@ -429,7 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!container) return;
 
   try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/project_activities?select=*&order=date.desc&limit=3`, {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/project_activities?select=id,title,date,description,location,image_url&order=date.desc&limit=3`, {
       method: 'GET',
       headers: {
         'apikey': SUPABASE_KEY,
@@ -439,8 +522,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to fetch activities: ${response.status} ${errorText}`);
+        throw new Error(`Failed to fetch activities: ${response.status}`);
     }
 
     const activities = await response.json();
@@ -479,4 +561,33 @@ function renderActivitiesUI(activities) {
 }
 
 fetchRecentActivities();
+
+    // Donations page: show a placeholder if the QR image is missing (replaces an inline onerror handler).
+    const donationQr = document.getElementById('donation-qr');
+    if (donationQr) {
+        const showQrPlaceholder = () => {
+            const placeholder = document.createElement('span');
+            placeholder.className = 'text-gray-400 text-sm';
+            placeholder.textContent = 'QR Code Image Placeholder';
+            donationQr.replaceWith(placeholder);
+        };
+        if (donationQr.complete && donationQr.naturalWidth === 0) showQrPlaceholder();
+        else donationQr.addEventListener('error', showQrPlaceholder, { once: true });
+    }
+});
+
+// 404 page: "Go Back" button (falls back to the home page when there is no history).
+document.addEventListener('click', function (event) {
+    const backButton = event.target.closest('[data-go-back]');
+    if (!backButton) return;
+    event.preventDefault();
+    if (window.history.length > 1 && document.referrer) window.history.back();
+    else window.location.href = '/';
+});
+
+// Updates page: re-parse the Facebook embed once everything has loaded.
+window.addEventListener('load', function () {
+    if (document.querySelector('.fb-page') && window.FB) {
+        FB.XFBML.parse();
+    }
 });

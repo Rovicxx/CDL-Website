@@ -10,24 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        heading: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui'],
-                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Calibri', 'sans-serif'],
-                    },
-                    colors: {
-                        primaryWhite: '#FFFFFF',
-                        offWhite: '#F9FAFB',
-                        deepCharcoal: '#111827',
-                        caritasCrimson: '#991B1B',
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="tailwind-config.js"></script>
     <style>
         body {
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Calibri", "Helvetica Neue", Arial, sans-serif;
@@ -108,7 +91,7 @@
                     <p class="text-gray-600 text-sm">Please scan the QR code below using your preferred payment app.</p>
                     
                     <div class="w-70 h-70 border-4 border-gray-100 rounded-xl overflow-hidden shadow-sm flex items-center justify-center bg-gray-50">
-                        <img src="images/qr_code.jpg" alt="Donation QR Code" class="max-w-full max-h-full object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-gray-400 text-sm\'>QR Code Image Placeholder</span>';" />
+                        <img id="donation-qr" src="images/qr_code.jpg" alt="Donation QR Code" class="max-w-full max-h-full object-contain" />
                     </div>
                 </div>
 
@@ -191,7 +174,7 @@
                 <span class="font-heading font-extrabold text-base tracking-tight uppercase">Caritas Diocese of Libmanan, Inc.</span>
             </div>
             <p class="text-[11px] text-gray-500 font-normal">
-                &copy; 2026 Caritas Diocese of Libmanan, Inc. All rights reserved.
+                &copy; 2026 Caritas Diocese of Libmanan, Inc. All rights reserved. · <a href="privacy.html" class="hover:text-white underline underline-offset-4 decoration-gray-600">Privacy Policy</a>
             </p>
         </div>
     </footer>

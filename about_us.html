@@ -10,24 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        heading: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui'],
-                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Calibri', 'sans-serif'],
-                    },
-                    colors: {
-                        primaryWhite: '#FFFFFF',
-                        offWhite: '#F9FAFB',
-                        deepCharcoal: '#111827',
-                        caritasCrimson: '#991B1B',
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="tailwind-config.js"></script>
     <style>
         body {
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Calibri", "Helvetica Neue", Arial, sans-serif;
@@ -166,7 +149,7 @@
 
     <footer class="bg-deepCharcoal text-white py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-sm text-gray-300 mb-4">&copy; 2026 Caritas Diocese of Libmanan, Inc. All rights reserved.</p>
+            <p class="text-sm text-gray-300 mb-4">&copy; 2026 Caritas Diocese of Libmanan, Inc. All rights reserved. · <a href="privacy.html" class="hover:text-white underline underline-offset-4 decoration-gray-600">Privacy Policy</a></p>
             <a href="index.html" class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white text-deepCharcoal font-medium hover:bg-gray-100 transition">Back to Home</a>
         </div>
     </footer>

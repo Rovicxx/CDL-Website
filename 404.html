@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Page Not Found — Caritas Diocese of Libmanan, Inc.</title>
+    <!-- Absolute paths: Vercel serves this page for missing URLs at any depth. -->
+    <link rel="icon" href="/images/OIP-17.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/tailwind-config.js"></script>
+    <style>
+        body {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Calibri", "Helvetica Neue", Arial, sans-serif;
+            background-color: #F9FAFB;
+            color: #111827;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-red-100 selection:text-red-900">
+
+    <header class="w-full bg-white border-b border-gray-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="h-20 flex items-center">
+                <a href="/" class="flex items-center space-x-3 group">
+                    <img src="/images/OIP-17.png" alt="Caritas Diocese Logo" class="w-10 h-10 rounded-xl shadow-md shadow-red-900/20 group-hover:scale-105 transition duration-200 object-cover">
+                    <div class="flex flex-col">
+                        <span class="font-heading font-extrabold text-lg tracking-tight text-deepCharcoal leading-tight">CARITAS</span>
+                        <span class="text-xs font-semibold tracking-widest text-gray-500 uppercase">DIOCESE OF LIBMANAN</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center px-4 py-16">
+        <div class="w-full max-w-md bg-white border border-gray-200 rounded-2xl shadow-sm p-8 sm:p-10 text-center">
+            <span class="text-xs font-bold uppercase tracking-widest text-caritasCrimson bg-red-50 border border-red-100 px-3 py-1 rounded-full">Error 404</span>
+            <p class="font-heading font-extrabold text-6xl sm:text-7xl text-deepCharcoal tracking-tight mt-6">404</p>
+            <h1 class="font-heading font-bold text-xl text-deepCharcoal mt-2">Page not found</h1>
+            <p class="text-sm text-gray-600 leading-relaxed mt-3">
+                The page you're looking for doesn't exist, may have been moved, or you don't have access to it.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+                <a href="/" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-caritasCrimson hover:bg-red-900 text-white font-medium text-sm shadow-lg shadow-red-900/10 transition">
+                    Back to Home
+                </a>
+                <a href="/" data-go-back class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-white hover:bg-gray-50 text-deepCharcoal font-medium text-sm border border-gray-200 shadow-sm transition">
+                    Go Back
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-deepCharcoal text-white py-6 border-t-4 border-caritasCrimson">
+        <p class="text-[11px] text-gray-500 text-center px-4">
+            &copy; 2026 Caritas Diocese of Libmanan, Inc. All rights reserved. · <a href="/privacy.html" class="hover:text-white underline underline-offset-4 decoration-gray-600">Privacy Policy</a>
+        </p>
+    </footer>
+
+    <script src="/scripts.js"></script>
+</body>
+</html>
