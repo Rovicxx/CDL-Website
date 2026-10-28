@@ -41,11 +41,6 @@ insert into public.admin_users (user_id)
 select id from auth.users where email = 'rovicmaderazo03@gmail.com'
 on conflict do nothing;
 
-update auth.users
-set encrypted_password = extensions.crypt('Rovic#032504', extensions.gen_salt('bf'))
-where email = 'rovicmaderazo03@gmail.com';
-
-
 do $$
 begin
     if not exists (select 1 from public.admin_users) then
