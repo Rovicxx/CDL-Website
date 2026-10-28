@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="images/OIP-17.png" />
+    <title>Admin — Caritas Diocese of Libmanan, Inc.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="tailwind-config.js"></script>
+    <style>
+        body {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Calibri", "Helvetica Neue", Arial, sans-serif;
+            background-color: #F9FAFB;
+            color: #111827;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-red-100 selection:text-red-900">
+
+    <header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="h-20 flex items-center justify-between gap-4">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <img src="images/OIP-17.png" alt="Caritas Diocese Logo" class="w-10 h-10 rounded-xl shadow-md shadow-red-900/20 object-cover" />
+                    <div class="flex flex-col">
+                        <span class="font-heading font-extrabold text-lg tracking-tight text-deepCharcoal leading-tight">CARITAS</span>
+                        <span class="text-xs font-semibold tracking-widest text-gray-500 uppercase">Admin</span>
+                    </div>
+                </a>
+                <div class="flex items-center gap-3">
+                    <span id="admin-user-email" class="hidden sm:inline text-sm text-gray-500"></span>
+                    <a href="index.html" class="text-sm font-medium text-deepCharcoal hover:text-caritasCrimson transition">View site</a>
+                    <button id="sign-out-btn" type="button" class="hidden px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm font-medium text-deepCharcoal hover:border-caritasCrimson hover:text-caritasCrimson transition">Sign out</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+            <div id="admin-status" role="status" aria-live="polite" class="hidden mb-6 rounded-xl border px-4 py-3 text-sm"></div>
+
+            <!-- Sign in -->
+            <section id="login-view" class="hidden">
+                <div class="max-w-md mx-auto bg-white border border-gray-200 rounded-2xl shadow-sm p-8">
+                    <span class="text-xs font-bold uppercase tracking-widest text-caritasCrimson bg-red-50 border border-red-100 px-3 py-1 rounded-full">Staff only</span>
+                    <h1 class="font-heading font-extrabold text-2xl text-deepCharcoal tracking-tight mt-4">Admin sign in</h1>
+                    <p class="text-sm text-gray-600 mt-1">Sign in to manage program activities.</p>
+                    <form id="login-form" class="space-y-4 mt-6">
+                        <div>
+                            <label for="login-email" class="text-xs font-semibold text-gray-500">Email</label>
+                            <input id="login-email" type="email" autocomplete="username" required class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" />
+                        </div>
+                        <div>
+                            <label for="login-password" class="text-xs font-semibold text-gray-500">Password</label>
+                            <input id="login-password" type="password" autocomplete="current-password" required class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" />
+                        </div>
+                        <button id="login-submit" type="submit" class="w-full px-4 py-2.5 rounded-xl bg-caritasCrimson hover:bg-red-900 text-white font-medium text-sm transition disabled:opacity-60">Sign in</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Dashboard -->
+            <section id="dashboard-view" class="hidden">
+                <div class="mb-8">
+                    <h1 class="font-heading font-extrabold text-3xl text-deepCharcoal tracking-tight">Program activities</h1>
+                    <p class="text-sm text-gray-600 mt-1">Activities appear in "Recent Program Activities" on the home page (the latest three are shown).</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+                    <!-- Add activity -->
+                    <div class="lg:col-span-5 bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+                        <h2 class="font-heading font-bold text-lg text-deepCharcoal">Add activity</h2>
+                        <form id="activity-form" class="space-y-4 mt-4">
+                            <div>
+                                <label for="activity-title" class="text-xs font-semibold text-gray-500">Title</label>
+                                <input id="activity-title" type="text" maxlength="200" required class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" />
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="activity-date" class="text-xs font-semibold text-gray-500">Date</label>
+                                    <input id="activity-date" type="date" required class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" />
+                                </div>
+                                <div>
+                                    <label for="activity-location" class="text-xs font-semibold text-gray-500">Location</label>
+                                    <input id="activity-location" type="text" maxlength="200" required class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2" />
+                                </div>
+                            </div>
+                            <div>
+                                <label for="activity-description" class="text-xs font-semibold text-gray-500">Description</label>
+                                <textarea id="activity-description" rows="5" maxlength="5000" required class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2"></textarea>
+                            </div>
+                            <div>
+                                <label for="activity-photo" class="text-xs font-semibold text-gray-500">Photo (JPG, PNG or WebP, up to 5 MB)</label>
+                                <input id="activity-photo" type="file" accept="image/jpeg,image/png,image/webp" class="mt-1 block w-full text-sm text-gray-600 file:mr-3 file:px-4 file:py-2 file:rounded-lg file:border file:border-gray-200 file:bg-gray-50 file:text-sm file:font-medium file:text-deepCharcoal hover:file:bg-red-50" />
+                                <img id="activity-photo-preview" alt="Selected photo preview" class="hidden mt-3 w-full max-h-56 object-cover rounded-xl border border-gray-200" />
+                            </div>
+                            <details class="text-sm">
+                                <summary class="cursor-pointer text-gray-500 hover:text-deepCharcoal">Or use an image link instead</summary>
+                                <input id="activity-image-url" type="url" placeholder="https://example.com/photo.jpg" class="mt-2 w-full rounded-lg border border-gray-200 px-3 py-2" />
+                            </details>
+                            <div class="flex items-center justify-end gap-3 pt-2">
+                                <button type="reset" class="px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm text-gray-600">Clear</button>
+                                <button id="activity-submit" type="submit" class="px-5 py-2 rounded-xl bg-caritasCrimson hover:bg-red-900 text-white text-sm font-medium transition disabled:opacity-60">Publish activity</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Published activities -->
+                    <div class="lg:col-span-7 bg-white border border-gray-200 rounded-2xl shadow-sm">
+                        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                            <h2 class="font-heading font-bold text-lg text-deepCharcoal">Published</h2>
+                            <button id="refresh-btn" type="button" class="text-sm font-medium text-gray-500 hover:text-caritasCrimson">Refresh</button>
+                        </div>
+                        <ul id="activity-list" class="divide-y divide-gray-100">
+                            <li class="px-6 py-8 text-sm text-gray-500 text-center">Loading…</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="scripts.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

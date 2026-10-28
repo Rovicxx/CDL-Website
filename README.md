@@ -8,6 +8,9 @@ Static website for Caritas Diocese of Libmanan, Inc., deployed on Vercel at http
 - **Styling:** Tailwind CSS via CDN. The shared theme lives in `tailwind-config.js`.
 - **Scripts:** `scripts.js` (menus, galleries, activity feed, admin "Add Activity" form).
 - **Data:** Supabase. The home page reads the `project_activities` table with the public anon key, and staff sign in with Supabase Auth to add activities.
+- **Admin:** staff sign in at `/admin` (`admin.html` + `admin.js`, not linked from the public pages) to publish
+  activities and upload photos to the `activity-images` storage bucket. There is intentionally no delete feature;
+  published activities and photos can only be changed or removed from the Supabase dashboard.
 - **Security headers:** set in `vercel.json` (Content-Security-Policy, X-Frame-Options, etc.).
 
 ## Security notes

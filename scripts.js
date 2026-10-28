@@ -26,34 +26,6 @@ function safeImageUrl(value, fallback) {
     }
 }
 
-// Client-side cooldown for the admin sign-in form. This only slows down the form;
-// the server-side limit is Supabase Auth's own rate limiting.
-const LOGIN_COOLDOWN_KEY = 'cdl_admin_login_attempts';
-const LOGIN_COOLDOWN_MINUTES = [0, 0, 1, 3, 5, 15, 30]; // after the 1st..7th+ failure
-
-function readLoginAttempts() {
-    try {
-        const data = JSON.parse(localStorage.getItem(LOGIN_COOLDOWN_KEY));
-        if (data && typeof data.failures === 'number') return data;
-    } catch (err) { /* storage unavailable */ }
-    return { failures: 0, lockedUntil: 0 };
-}
-
-function writeLoginAttempts(data) {
-    try {
-        if (data.failures === 0) localStorage.removeItem(LOGIN_COOLDOWN_KEY);
-        else localStorage.setItem(LOGIN_COOLDOWN_KEY, JSON.stringify(data));
-    } catch (err) { /* storage unavailable */ }
-}
-
-function recordLoginFailure() {
-    const data = readLoginAttempts();
-    data.failures += 1;
-    const index = Math.min(data.failures, LOGIN_COOLDOWN_MINUTES.length) - 1;
-    data.lockedUntil = Date.now() + LOGIN_COOLDOWN_MINUTES[index] * 60 * 1000;
-    writeLoginAttempts(data);
-}
-
 (function() {
     const scriptureList = [
         '"Commit to the Lord whatever you do, and He will establish your plans." – Proverbs 16:3',
@@ -127,12 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const leftButton = document.getElementById('framework-scroll-left');
     const rightButton = document.getElementById('framework-scroll-right');
     const frameworkCards = document.getElementById('framework-cards');
-
-    const addActivityBtn = document.getElementById('add-activity-btn');
-    const addActivityModal = document.getElementById('add-activity-modal');
-    const addActivityModalClose = document.getElementById('add-activity-modal-close');
-    const addActivityCancel = document.getElementById('add-activity-cancel');
-    const addActivityForm = document.getElementById('add-activity-form');
 
     const programGalleryModal = document.getElementById('program-gallery-modal');
     const programGalleryTitle = document.getElementById('program-gallery-title');
@@ -217,21 +183,6 @@ document.addEventListener('DOMContentLoaded', function () {
             programGalleryModal.classList.add('hidden');
             programGalleryModal.classList.remove('flex');
         }
-    }
-
-    function openAddActivityModal() {
-        if (addActivityModal) {
-            addActivityModal.classList.remove('hidden');
-            addActivityModal.classList.add('flex');
-        }
-    }
-
-    function closeAddActivityModal() {
-        if (addActivityModal) {
-            addActivityModal.classList.add('hidden');
-            addActivityModal.classList.remove('flex');
-        }
-        if (addActivityForm) addActivityForm.reset();
     }
 
     function openActivityDetailModal(activity) {
@@ -353,21 +304,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', event => {
         if (event.key === 'Escape') {
             closeProgramGallery();
-            closeAddActivityModal();
             closeActivityDetailModal();
         }
     });
-
-    if (addActivityBtn) addActivityBtn.addEventListener('click', openAddActivityModal);
-    if (addActivityModalClose) addActivityModalClose.addEventListener('click', closeAddActivityModal);
-    if (addActivityCancel) addActivityCancel.addEventListener('click', closeAddActivityModal);
-    if (addActivityModal) {
-        addActivityModal.addEventListener('click', event => {
-            if (event.target === addActivityModal) {
-                closeAddActivityModal();
-            }
-        });
-    }
 
     if (activityDetailClose) {
         activityDetailClose.addEventListener('click', closeActivityDetailModal);
@@ -388,120 +327,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const card = viewButton.closest('[data-activity]');
                 if (card && card.dataset.activity) {
                     openActivityDetailModal(JSON.parse(card.dataset.activity));
-                }
-            }
-        });
-    }
-
-    if (addActivityForm) {
-        addActivityForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
-
-            const attempts = readLoginAttempts();
-            if (attempts.lockedUntil > Date.now()) {
-                const minutes = Math.ceil((attempts.lockedUntil - Date.now()) / 60000);
-                alert(`Too many failed sign-in attempts. Please wait ${minutes} minute${minutes === 1 ? '' : 's'} and try again.`);
-                return;
-            }
-
-            const email = document.getElementById('admin-email').value.trim().toLowerCase();
-            const password = document.getElementById('admin-password').value;
-
-            const imageUrl = document.getElementById('activity-image-url').value.trim();
-            if (imageUrl && !/^https?:\/\//i.test(imageUrl)) {
-                alert('Image URL must start with https:// or http://');
-                return;
-            }
-
-            const newActivity = {
-                title: document.getElementById('activity-title').value.trim(),
-                description: document.getElementById('activity-description').value.trim(),
-                location: document.getElementById('activity-location').value.trim(),
-                image_url: imageUrl,
-                date: document.getElementById('activity-date').value,
-            };
-
-            let accessToken = null;
-            try {
-                // 1. Authenticate with Supabase Auth
-                const authResponse = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                if (authResponse.status === 429) {
-                    throw new Error('Too many sign-in attempts. Please try again later.');
-                }
-                if (!authResponse.ok) {
-                    recordLoginFailure();
-                    throw new Error('Sign-in failed. Please check your admin email and password.');
-                }
-                writeLoginAttempts({ failures: 0, lockedUntil: 0 });
-
-                const authData = await authResponse.json();
-                accessToken = authData.access_token;
-
-                // 1.5 Get the authenticated user's details to associate with the new activity
-                const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-
-                if (!userResponse.ok) {
-                    throw new Error('Could not retrieve user details after authentication.');
-                }
-
-                const user = await userResponse.json();
-                // Associate the activity with the logged-in user.
-                // Assumes a 'user_id' column in your 'project_activities' table.
-                newActivity.user_id = user.id;
-
-                // 2. Insert the activity using the authenticated user's token
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/project_activities`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(newActivity)
-                });
-
-                if (!response.ok) {
-                    // Keep database error details out of the UI.
-                    console.error('Insert failed with status', response.status);
-                    throw new Error(response.status === 401 || response.status === 403
-                        ? 'This account is not allowed to add activities.'
-                        : 'The activity could not be saved. Please try again later.');
-                }
-
-                const [createdActivity] = await response.json();
-                const container = document.getElementById('activities-feed-container');
-                const noActivitiesMessage = container.querySelector('.col-span-full');
-                if (noActivitiesMessage) noActivitiesMessage.remove();
-                
-                container.prepend(createActivityCard(createdActivity));
-                closeAddActivityModal();
-
-            } catch (error) {
-                console.error('Error adding activity:', error.message);
-                alert(error instanceof TypeError
-                    ? 'Could not reach the server. Please check your connection.'
-                    : error.message);
-            } finally {
-                // End the session right away; the form signs in again on every submission.
-                if (accessToken) {
-                    fetch(`${SUPABASE_URL}/auth/v1/logout`, {
-                        method: 'POST',
-                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${accessToken}` }
-                    }).catch(() => {});
                 }
             }
         });
