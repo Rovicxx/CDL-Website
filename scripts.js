@@ -401,6 +401,41 @@ fetchRecentActivities();
     }
 });
 
+// Programs page: click a program photo to view it larger.
+document.addEventListener('DOMContentLoaded', function () {
+    const lightbox = document.getElementById('photo-lightbox');
+    if (!lightbox) return;
+    const image = document.getElementById('photo-lightbox-image');
+    const caption = document.getElementById('photo-lightbox-caption');
+    let lastTrigger = null;
+
+    function closeLightbox() {
+        if (lightbox.classList.contains('hidden')) return;
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+        if (lastTrigger) lastTrigger.focus();
+    }
+
+    document.addEventListener('click', function (event) {
+        const trigger = event.target.closest('[data-lightbox]');
+        if (trigger) {
+            const thumbnail = trigger.querySelector('img');
+            image.src = safeImageUrl(trigger.dataset.lightbox, 'images/OIP-17.png');
+            image.alt = thumbnail ? thumbnail.alt : '';
+            caption.textContent = trigger.dataset.caption || '';
+            lastTrigger = trigger;
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            document.getElementById('photo-lightbox-close').focus();
+        } else if (event.target === lightbox || event.target.closest('#photo-lightbox-close')) {
+            closeLightbox();
+        }
+    });
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeLightbox();
+    });
+});
+
 // 404 page: "Go Back" button (falls back to the home page when there is no history).
 document.addEventListener('click', function (event) {
     const backButton = event.target.closest('[data-go-back]');
