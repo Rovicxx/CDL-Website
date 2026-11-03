@@ -336,13 +336,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Uploads to the public activity-images bucket under a generated name; returns the public URL.
+    // Names are unique and never overwritten (x-upsert false), so browsers and the Supabase CDN can cache them for a year.
     async function uploadPhoto(file) {
         if (uploadedPhotos.has(file)) return uploadedPhotos.get(file);
 
         const path = `${new Date().getFullYear()}/${crypto.randomUUID()}.${IMAGE_TYPES[file.type]}`;
         const response = await fetch(`${SUPABASE_URL}/storage/v1/object/${IMAGE_BUCKET}/${path}`, {
             method: 'POST',
-            headers: await authHeaders({ 'Content-Type': file.type, 'Cache-Control': '3600', 'x-upsert': 'false' }),
+            headers: await authHeaders({ 'Content-Type': file.type, 'Cache-Control': '31536000', 'x-upsert': 'false' }),
             body: file
         });
         if (!response.ok) {
