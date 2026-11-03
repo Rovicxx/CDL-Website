@@ -26,6 +26,12 @@ function safeImageUrl(value, fallback) {
     }
 }
 
+// All photos of an activity: image_urls when set (several photos), otherwise the single image_url.
+function activityPhotos(activity) {
+    if (Array.isArray(activity.image_urls) && activity.image_urls.length) return activity.image_urls;
+    return activity.image_url ? [activity.image_url] : [];
+}
+
 (function() {
     const scriptureList = [
         '"Commit to the Lord whatever you do, and He will establish your plans." – Proverbs 16:3',
@@ -194,11 +200,18 @@ document.addEventListener('DOMContentLoaded', function () {
         activityDetailDescription.innerHTML = escapeHtml(activity.description || 'No description provided.').replace(/\n/g, '<br>');
 
         const fallbackImage = 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80';
-        const displayImage = escapeHtml(safeImageUrl(activity.image_url, fallbackImage));
         const activityTitle = activity.title || 'Program Activity';
         const activityLocation = activity.location || 'Unknown Location';
         const safeTitle = escapeHtml(`Caritas Libmanan Field Update: ${activityTitle} at ${activityLocation}`);
-        activityDetailImageContainer.innerHTML = `<img src="${displayImage}" alt="${safeTitle}" title="${safeTitle}" class="w-full h-auto object-contain max-h-[50vh]" />`;
+        const photos = activityPhotos(activity);
+        if (photos.length > 1) {
+            activityDetailImageContainer.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2">${photos.map((src, index) => `
+                <img src="${escapeHtml(safeImageUrl(src, fallbackImage))}" alt="${safeTitle} (photo ${index + 1})" title="${safeTitle}" loading="lazy" class="w-full h-auto object-contain max-h-[50vh] rounded-xl bg-white" />`).join('')}
+            </div>`;
+        } else {
+            const displayImage = escapeHtml(safeImageUrl(photos[0], fallbackImage));
+            activityDetailImageContainer.innerHTML = `<img src="${displayImage}" alt="${safeTitle}" title="${safeTitle}" class="w-full h-auto object-contain max-h-[50vh]" />`;
+        }
 
         activityDetailModal.classList.remove('hidden');
         activityDetailModal.classList.add('flex');
@@ -218,6 +231,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const fallbackImage = 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80';
         const displayImage = escapeHtml(safeImageUrl(activity.image_url, fallbackImage));
+        const photoCount = activityPhotos(activity).length;
+        const photoCountBadge = photoCount > 1
+            ? `<div class="absolute top-3 right-3 bg-gray-900/80 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border border-white/10">${photoCount} photos</div>`
+            : '';
         const formattedDate = escapeHtml(new Date(activity.date).toLocaleDateString('en-US', {
             month: 'long', day: 'numeric', year: 'numeric'
         }));
@@ -232,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
         card.innerHTML = `
             <div class="relative h-48 overflow-hidden bg-gray-100">
               <img src="${displayImage}" alt="${safeTitle}" title="${safeTitle}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 mix-blend-normal">
+              ${photoCountBadge}
               <div class="absolute bottom-3 left-3 bg-gray-900/80 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border border-white/10 flex items-center space-x-1">
                 <svg class="w-3 h-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 <span>${escapeHtml(activity.location || 'Location Unknown')}</span>
@@ -337,7 +355,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!container) return;
 
   try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/project_activities?select=id,title,date,description,location,image_url&order=date.desc&limit=3`, {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/project_activities?select=*&order=date.desc&limit=3`, {
       method: 'GET',
       headers: {
         'apikey': SUPABASE_KEY,

@@ -97,9 +97,9 @@
                                 <textarea id="activity-description" rows="5" maxlength="5000" required class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2"></textarea>
                             </div>
                             <div>
-                                <label for="activity-photo" class="text-xs font-semibold text-gray-500">Photo (JPG, PNG or WebP, up to 5 MB)</label>
-                                <input id="activity-photo" type="file" accept="image/jpeg,image/png,image/webp" class="mt-1 block w-full text-sm text-gray-600 file:mr-3 file:px-4 file:py-2 file:rounded-lg file:border file:border-gray-200 file:bg-gray-50 file:text-sm file:font-medium file:text-deepCharcoal hover:file:bg-red-50" />
-                                <img id="activity-photo-preview" alt="Selected photo preview" class="hidden mt-3 w-full max-h-56 object-cover rounded-xl border border-gray-200" />
+                                <label for="activity-photo" class="text-xs font-semibold text-gray-500">Photos (JPG, PNG or WebP, up to 5 MB each, max 10). The first photo is the cover.</label>
+                                <input id="activity-photo" type="file" multiple accept="image/jpeg,image/png,image/webp" class="mt-1 block w-full text-sm text-gray-600 file:mr-3 file:px-4 file:py-2 file:rounded-lg file:border file:border-gray-200 file:bg-gray-50 file:text-sm file:font-medium file:text-deepCharcoal hover:file:bg-red-50" />
+                                <div id="activity-photo-preview" class="hidden mt-3 grid grid-cols-3 gap-2"></div>
                             </div>
                             <details class="text-sm">
                                 <summary class="cursor-pointer text-gray-500 hover:text-deepCharcoal">Or use an image link instead</summary>

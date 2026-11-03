@@ -6,6 +6,7 @@
 const ADMIN_SESSION_KEY = 'cdl_admin_session';
 const IMAGE_BUCKET = 'activity-images';
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_PHOTOS = 10;
 const IMAGE_TYPES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
 
 // Client-side cooldown for the sign-in form. This only slows down the form;
@@ -74,9 +75,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const refreshBtn = document.getElementById('refresh-btn');
 
     let session = loadSession();
-    let previewUrl = null;
-    // If a photo uploaded but saving the activity failed, reuse it on retry instead of uploading again.
-    let uploadedPhoto = null; // { file, url }
+    let previewUrls = [];
+    // If photos uploaded but saving the activity failed, reuse them on retry instead of uploading again.
+    let uploadedPhotos = new Map(); // File -> public URL
 
     function showStatus(message, kind) {
         const styles = {
@@ -246,7 +247,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const meta = document.createElement('p');
             meta.className = 'text-xs text-gray-500 mt-0.5';
             const date = activity.date ? new Date(activity.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
-            meta.textContent = [date, activity.location].filter(Boolean).join(' · ');
+            const photoCount = Array.isArray(activity.image_urls) ? activity.image_urls.length : 0;
+            meta.textContent = [date, activity.location, photoCount > 1 ? `${photoCount} photos` : ''].filter(Boolean).join(' · ');
             text.append(title, meta);
 
             item.append(image, text);
@@ -256,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function loadActivities() {
         try {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/project_activities?select=id,title,date,location,image_url&order=date.desc&limit=100`, {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/project_activities?select=*&order=date.desc&limit=100`, {
                 headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
             });
             if (!response.ok) throw new Error(`status ${response.status}`);
@@ -279,37 +281,63 @@ document.addEventListener('DOMContentLoaded', function () {
         return null;
     }
 
+    // Returns an error message for the first problem in the selection, or null.
+    function validatePhotos(files) {
+        if (files.length > MAX_PHOTOS) return `Please choose at most ${MAX_PHOTOS} photos.`;
+        for (const file of files) {
+            const problem = validatePhoto(file);
+            if (problem) return `${file.name}: ${problem}`;
+        }
+        return null;
+    }
+
     function clearPreview() {
-        if (previewUrl) URL.revokeObjectURL(previewUrl);
-        previewUrl = null;
-        photoPreview.removeAttribute('src');
+        previewUrls.forEach(url => URL.revokeObjectURL(url));
+        previewUrls = [];
+        photoPreview.replaceChildren();
         photoPreview.classList.add('hidden');
     }
 
     photoInput.addEventListener('change', function () {
         clearPreview();
-        const file = photoInput.files[0];
-        if (!file) return;
-        const problem = validatePhoto(file);
+        const files = Array.from(photoInput.files);
+        if (!files.length) return;
+        const problem = validatePhotos(files);
         if (problem) {
             showStatus(problem, 'error');
             photoInput.value = '';
             return;
         }
         clearStatus();
-        previewUrl = URL.createObjectURL(file);
-        photoPreview.src = previewUrl;
+        files.forEach((file, index) => {
+            const url = URL.createObjectURL(file);
+            previewUrls.push(url);
+            const figure = document.createElement('div');
+            figure.className = 'relative';
+            const image = document.createElement('img');
+            image.src = url;
+            image.alt = `Selected photo ${index + 1}`;
+            image.className = 'w-full h-24 object-cover rounded-lg border border-gray-200';
+            figure.appendChild(image);
+            if (index === 0) {
+                const badge = document.createElement('span');
+                badge.className = 'absolute top-1 left-1 bg-caritasCrimson text-white text-[10px] font-semibold px-1.5 py-0.5 rounded';
+                badge.textContent = 'Cover';
+                figure.appendChild(badge);
+            }
+            photoPreview.appendChild(figure);
+        });
         photoPreview.classList.remove('hidden');
     });
 
     activityForm.addEventListener('reset', function () {
         clearPreview();
-        uploadedPhoto = null;
+        uploadedPhotos = new Map();
     });
 
     // Uploads to the public activity-images bucket under a generated name; returns the public URL.
     async function uploadPhoto(file) {
-        if (uploadedPhoto && uploadedPhoto.file === file) return uploadedPhoto.url;
+        if (uploadedPhotos.has(file)) return uploadedPhotos.get(file);
 
         const path = `${new Date().getFullYear()}/${crypto.randomUUID()}.${IMAGE_TYPES[file.type]}`;
         const response = await fetch(`${SUPABASE_URL}/storage/v1/object/${IMAGE_BUCKET}/${path}`, {
@@ -321,10 +349,10 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Photo upload failed with status', response.status);
             throw new Error(response.status === 401 || response.status === 403
                 ? 'This account is not allowed to upload photos.'
-                : 'The photo could not be uploaded. Please try again.');
+                : `The photo "${file.name}" could not be uploaded. Please try again.`);
         }
         const url = `${SUPABASE_URL}/storage/v1/object/public/${IMAGE_BUCKET}/${path}`;
-        uploadedPhoto = { file, url };
+        uploadedPhotos.set(file, url);
         return url;
     }
 
@@ -334,10 +362,10 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         clearStatus();
 
-        const file = photoInput.files[0];
+        const files = Array.from(photoInput.files);
         const imageLink = document.getElementById('activity-image-url').value.trim();
-        if (file) {
-            const problem = validatePhoto(file);
+        if (files.length) {
+            const problem = validatePhotos(files);
             if (problem) { showStatus(problem, 'error'); return; }
         } else if (imageLink && !/^https?:\/\//i.test(imageLink)) {
             showStatus('Image link must start with https:// or http://', 'error');
@@ -346,21 +374,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
         activitySubmit.disabled = true;
         try {
-            const imageUrl = file ? await uploadPhoto(file) : imageLink;
+            // Upload one at a time so the photos keep the order they were selected in.
+            const imageUrls = [];
+            if (files.length) {
+                for (let i = 0; i < files.length; i++) {
+                    showStatus(`Uploading photo ${i + 1} of ${files.length}…`, 'info');
+                    imageUrls.push(await uploadPhoto(files[i]));
+                }
+            } else if (imageLink) {
+                imageUrls.push(imageLink);
+            }
+            const activity = {
+                title: document.getElementById('activity-title').value.trim(),
+                description: document.getElementById('activity-description').value.trim(),
+                location: document.getElementById('activity-location').value.trim(),
+                date: document.getElementById('activity-date').value,
+                image_url: imageUrls[0] || '',
+                user_id: session.user_id
+            };
+            // image_urls needs the column from supabase/multiple-images.sql; only sent when there are photos.
+            if (imageUrls.length) activity.image_urls = imageUrls;
+
             const response = await fetch(`${SUPABASE_URL}/rest/v1/project_activities`, {
                 method: 'POST',
                 headers: await authHeaders({ 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }),
-                body: JSON.stringify({
-                    title: document.getElementById('activity-title').value.trim(),
-                    description: document.getElementById('activity-description').value.trim(),
-                    location: document.getElementById('activity-location').value.trim(),
-                    date: document.getElementById('activity-date').value,
-                    image_url: imageUrl,
-                    user_id: session.user_id
-                })
+                body: JSON.stringify(activity)
             });
             if (!response.ok) {
                 console.error('Insert failed with status', response.status);
+                const details = await response.json().catch(() => ({}));
+                if (details.code === 'PGRST204') {
+                    throw new Error('The database is not set up for multiple photos yet. Run supabase/multiple-images.sql in the Supabase SQL Editor, then publish again.');
+                }
                 throw new Error(response.status === 401 || response.status === 403
                     ? 'This account is not allowed to add activities.'
                     : 'The activity could not be saved. Please try again.');
